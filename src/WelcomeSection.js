@@ -16,6 +16,7 @@ const WelcomeContainer = styled.section`
     margin-bottom: 1px;
 
   @media (max-width: 768px) {
+      content-visibility: hidden;
     width: 91%;
     padding: 30px 10px;
     align-items: center; /* Center items horizontally on small screens */
@@ -65,13 +66,10 @@ const WelcomeText = styled.p`
 
 const WelcomeSection = () => (
   <WelcomeContainer>
-    <WelcomeTitle>Varmt välkommen</WelcomeTitle>
+    <WelcomeTitle>Välkommen</WelcomeTitle>
     <WelcomeSubtitle>till samladpolitik</WelcomeSubtitle>
     <WelcomeText>
-      Vi vill underlätta sökandet för dig som politiskt insatt.
-      Istället för att söka igenom alla sociala platformer,
-      för att hitta de senaste inläggen från våra svenska politiker.
-      Så kan du numera hitta allt du behöver. Här, på en och samma plats!
+      Vi vill göra det enklare för dig som är intresserad av politik. Istället för att behöva leta igenom alla sociala medier för att hitta de senaste uppdateringarna från våra svenska politiker, kan du nu hitta allt du behöver på ett och samma ställe här!
     </WelcomeText>
   </WelcomeContainer>
 );
