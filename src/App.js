@@ -29,25 +29,24 @@ const AppContainer = styled.div`
 `;
 
 const MainContent = styled.div`
+    font-family: "Montserrat Medium";
     flex: 1;
     display: flex;
     justify-content: flex-start;
     align-items: center;
     flex-direction: column;
-    padding-top: 30px;
+    padding-top: 5px;
     position: relative;
     z-index: 1;
-    background-color: #ea7727; /* Purple background */
-    color: white;
+    background-color: rgb(255, 255, 255); /* Purple background */
+    color: #100404;
     width: 100%;
-    padding-bottom: 100px;
-    border-bottom-left-radius: 30% 40%;
-    border-bottom-right-radius: 30% 40%;
+    padding-bottom: 10px;
     margin-bottom: 27px;
 `;
 
 const Title = styled.h1`
-    font-size: 2.5em;
+    font-size: 1.5em;
     margin: 20px 0;
     text-align: center;
 `;
@@ -130,7 +129,7 @@ function App() {
             <MainContent>
                 <Title>samladpolitik</Title>
                 <Description>
-                    Alla inlägg från svenska politiker samlade på en plats.
+
 
                 </Description>
             </MainContent>
