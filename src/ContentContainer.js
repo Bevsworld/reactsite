@@ -18,8 +18,8 @@ const Container = styled.div`
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 80%;
-    height: 500px; /* Fixed height for approximately 10 tweets */
-    overflow-y: scroll; /* Enable vertical scrolling */
+    height: 500px; /* Fixed height for desktop */
+    overflow-y: auto; /* Enable vertical scrolling */
     margin-left: auto;
     margin-right: auto;
     text-align: left;
@@ -27,7 +27,7 @@ const Container = styled.div`
     @media (max-width: 768px) {
         width: 100%;
         margin-left: 0;
-        height: auto;
+        height: 500px; /* Fixed height for mobile */
         margin-bottom: 20px;
     }
 `;
@@ -103,16 +103,17 @@ const NavigationButtons = styled.div`
 `;
 
 const NavButton = styled.button`
-    background-color: rgba(161, 161, 163, 0.66);
+    background-color: rgb(188, 225, 255);
     color: white;
     border: none;
     padding: 3px 6px; /* Make the buttons smaller */
     border-radius: 5px;
     cursor: pointer;
+
 `;
 
 const PillButton = styled.button`
-    background-color: #d5d5d5;
+    background-color: #bce1ff;
     color: white;
     border: none;
     padding: 5px 10px;

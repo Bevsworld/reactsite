@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
+import Header from './Header';
+import WelcomeSection from './WelcomeSection';
 import ContentContainer from './ContentContainer';
 import RightContainer from './RightContainer';
 import sLogo from './s.png';
@@ -43,34 +45,30 @@ const MainContent = styled.div`
     width: 100%;
     padding-bottom: 10px;
     margin-bottom: 27px;
-`;
-
-const Title = styled.h1`
-    font-size: 1.5em;
-    margin: 20px 0;
-    text-align: center;
-`;
-
-const Description = styled.p`
-    font-size: 1.2em;
-    margin-bottom: 40px;
-    text-align: center;
+    margin-top: 90px;
 `;
 
 const BodyContent = styled.div`
+    width: 80%;
+    max-width: 1200px;
     background: white;
     color: black;
     padding: 20px 20px;
     text-align: center;
     position: relative;
-    margin-top: -30px; /* Move the content up */
+    margin: -30px auto 0; /* Move the content up and center */
+    
+    @media (max-width: 768px) {
+        width: 90%;
+        padding: 10px;
+    }
 `;
 
 const ContentWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    width: 80%;
+    width: 100%;
     margin: 0 auto;
 
     @media (max-width: 768px) {
@@ -126,32 +124,29 @@ function App() {
     return (
         <AppContainer>
             <GlobalStyle />
+            <Header />
+            <WelcomeSection />
             <MainContent>
-                <Title>samladpolitik</Title>
-                <Description>
-
-
-                </Description>
+                <BodyContent>
+                    <h2>Senaste</h2>
+                    <p>Här finner du det senaste ifrån dessa partier:</p>
+                    <PartyLogos>
+                        {Object.keys(logos).map(party => (
+                            <img
+                                key={party}
+                                src={logos[party]}
+                                alt={`${party} logo`}
+                                className={selectedParties.includes(party) ? 'selected' : ''}
+                                onClick={() => handleLogoClick(party)}
+                            />
+                        ))}
+                    </PartyLogos>
+                    <ContentWrapper>
+                        <ContentContainer filter={selectedParties} />
+                        <RightContainer />
+                    </ContentWrapper>
+                </BodyContent>
             </MainContent>
-            <BodyContent>
-                <h2>Senaste</h2>
-                <p>Här finner du det senaste ifrån dessa partier:</p>
-                <PartyLogos>
-                    {Object.keys(logos).map(party => (
-                        <img
-                            key={party}
-                            src={logos[party]}
-                            alt={`${party} logo`}
-                            className={selectedParties.includes(party) ? 'selected' : ''}
-                            onClick={() => handleLogoClick(party)}
-                        />
-                    ))}
-                </PartyLogos>
-                <ContentWrapper>
-                    <ContentContainer filter={selectedParties} />
-                    <RightContainer />
-                </ContentWrapper>
-            </BodyContent>
         </AppContainer>
     );
 }
