@@ -3,14 +3,13 @@ import styled from 'styled-components';
 
 const HeaderContainer = styled.header`
   width: 100%;
-    height: 20px;
-  padding: 20px;
+  padding: 8px;
   background-color: white;
+    padding-left: 25px;
   display: flex;
-  justify-content: center;
+  justify-content: left;
   align-items: center;
   border-bottom: 1px solid #e0e0e0; /* Add bottom border */
-    margin-bottom: 100px;
 `;
 
 const Logo = styled.h1`

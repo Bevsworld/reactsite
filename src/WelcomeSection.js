@@ -12,11 +12,12 @@ const WelcomeContainer = styled.section`
   align-items: flex-start; /* Align items to the left */
   text-align: left; /* Align text to the left */
   margin: 0 auto;
+    padding-top: 120px;
+    margin-bottom: 1px;
 
   @media (max-width: 768px) {
-    width: 90%;
-    padding: 5px 5px;
-      margin-bottom: 2px;
+    width: 91%;
+    padding: 30px 10px;
     align-items: center; /* Center items horizontally on small screens */
     text-align: center; /* Center text on small screens */
   }
@@ -27,9 +28,13 @@ const WelcomeTitle = styled.h1`
   font-family: 'Georgia', serif;
   color: black;
   margin: 0 0 20px;
+    
 
   @media (max-width: 768px) {
-    font-size: 2em;
+    font-size: 1.7em;
+      margin-bottom: 7px;
+      margin-top: 25px;
+      
   }
 `;
 
@@ -40,7 +45,7 @@ const WelcomeSubtitle = styled.h2`
   margin: 0 0 20px;
 
   @media (max-width: 768px) {
-    font-size: 1.5em;
+    font-size: 1.2em;
   }
 `;
 
@@ -51,6 +56,10 @@ const WelcomeText = styled.p`
 
   @media (max-width: 768px) {
     font-size: 1em;
+      margin-bottom: 2px;
+      padding-bottom: 1px;
+      width: 90%;
+      
   }
 `;
 
