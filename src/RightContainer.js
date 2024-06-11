@@ -21,7 +21,7 @@ const Container = styled.div`
     width: 300px;
     max-height: 500px;  /* Set a maximum height for internal scrolling */
     overflow-y: auto;   /* Enable vertical scrolling */
-    margin-left: 20px;
+    margin-left: 26px;
     text-align: left;
     position: relative;
 
@@ -37,9 +37,10 @@ const Post = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    margin-top: 5px;
     margin-bottom: 20px;
     background: white;
-    padding: 10px;
+    padding: 5px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     position: relative;
@@ -49,14 +50,16 @@ const Post = styled.div`
 
 const ProfilePicture = styled.img`
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    margin-right: 10px;
+    width: 30px;
+    height: 30px;
+    margin-top: 5px;
+    margin-right: 12px;
+    margin-left: 12px;
 `;
 
 const PartyLogo = styled.img`
-    width: 20px;
-    height: 20px;
+    width: 15px;
+    height: 15px;
     border-radius: 50%;
     margin-left: 5px;
 `;
@@ -80,14 +83,16 @@ const UsernameWrapper = styled.div`
 `;
 
 const Username = styled.span`
-    font-weight: bold;
+    font-weight: normal;
+    font-size: 13px;
     white-space: nowrap;
+    margin-top: 5px;
     overflow: hidden;
     text-overflow: ellipsis;
 `;
 
 const Timestamp = styled.span`
-    font-size: 0.8em;
+    font-size: 0.6em;
     color: gray;
 `;
 
@@ -107,10 +112,12 @@ const PostVideo = styled.video`
 `;
 
 const Caption = styled.p`
+    font-size: small;
     margin-top: 10px;
     word-wrap: break-word;
     overflow: hidden;
-    width: 100%;
+    width: 95%;
+    align-self: center;
 `;
 
 const RightContainer = ({ filter }) => {

@@ -51,12 +51,12 @@ const BodyContent = styled.div`
     width: 80%;
     max-width: 1200px;
     background: white;
-    color: black;
+    color: rgba(28, 28, 28, 0.98);
     padding: 20px 20px;
     text-align: center;
     position: relative;
     margin: -30px auto 0;
-    
+
     @media (max-width: 768px) {
         width: 100%;
         padding: 10px;
@@ -69,6 +69,7 @@ const ContentWrapper = styled.div`
     align-items: flex-start;
     width: 100%;
     margin: 0 auto;
+    
 
     @media (max-width: 768px) {
         flex-direction: column;
@@ -94,7 +95,7 @@ const PartyLogos = styled.div`
     }
 
     img.selected {
-        border-color: #6633cc;
+        border-color: #afd3fa;
     }
 `;
 

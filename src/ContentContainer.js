@@ -37,6 +37,7 @@ const Container = styled.div`
 const Tweet = styled.div`
     display: flex;
     align-items: flex-start;
+    font-size: 15px;
     margin-bottom: 20px;
     background: white;
     padding: 10px 50px 10px 10px; /* Add padding to the right to avoid text overlap with navigation buttons */
@@ -73,22 +74,24 @@ const TweetContent = styled.div`
 `;
 
 const Username = styled.span`
-    font-weight: bold;
+    font-weight: normal;
     margin-bottom: 5px;
 `;
 
 const Timestamp = styled.span`
+    
     font-size: 0.8em;
     color: gray;
-    margin-top: 5px;
+    margin-top: 15px;
 `;
 
 const TwitterLogo = styled.img`
     position: absolute;
     top: 10px;
-    right: 10px;
+    right: 15px;
     width: 20px;
     height: 20px;
+    
 `;
 
 const TweetText = styled.span`
@@ -105,21 +108,21 @@ const NavigationButtons = styled.div`
 `;
 
 const NavButton = styled.button`
-    background-color: rgb(188, 225, 255);
+    background-color: rgb(111, 152, 232);
     color: white;
     border: none;
-    padding: 3px 6px; /* Make the buttons smaller */
-    border-radius: 5px;
+    padding: 1px 2px; /* Make the buttons smaller */
+    border-radius: 2px;
     cursor: pointer;
 
 `;
 
 const PillButton = styled.button`
-    background-color: #bce1ff;
+    background-color: #6f98e8;
     color: white;
     border: none;
-    padding: 5px 10px;
-    border-radius: 5px; /* Pill shape */
+    padding: 2px 7px;
+    border-radius: 2px; /* Pill shape */
     margin: 0 5px; /* Add some margin between the arrows and the pill button */
     cursor: pointer;
 `;
