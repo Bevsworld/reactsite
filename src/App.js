@@ -58,7 +58,7 @@ const BodyContent = styled.div`
     margin: -30px auto 0; /* Move the content up and center */
     
     @media (max-width: 768px) {
-        width: 90%;
+        width: 100%;
         padding: 10px;
     }
 `;
@@ -82,6 +82,7 @@ const PartyLogos = styled.div`
     justify-content: center;
     align-items: center;
     margin-top: 10px;
+    margin-bottom: 25px;
 
     img {
         margin: 0 5px;

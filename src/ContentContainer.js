@@ -23,6 +23,7 @@ const Container = styled.div`
     margin-left: auto;
     margin-right: auto;
     text-align: left;
+    
 
     @media (max-width: 768px) {
         width: 90%;
