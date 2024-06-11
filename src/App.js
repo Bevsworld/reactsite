@@ -12,9 +12,9 @@ import cLogo from './c.png';
 import mLogo from './moderat.png';
 
 const GlobalStyle = createGlobalStyle`
-    @import url('https://fonts.googleapis.com/css2?family=Cousine:wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
     body {
-        font-family: 'Cousine', monospace;
+        font-family: 'Quicksand', monospace;
         margin: 0;
         padding: 0;
         box-sizing: border-box;
