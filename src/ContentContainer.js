@@ -25,12 +25,13 @@ const Container = styled.div`
     text-align: left;
 
     @media (max-width: 768px) {
-        width: 100%;
+        width: 90%;
         margin-left: 0;
         height: 500px; /* Fixed height for mobile */
         margin-bottom: 20px;
     }
 `;
+
 
 const Tweet = styled.div`
     display: flex;

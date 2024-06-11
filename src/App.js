@@ -45,7 +45,6 @@ const MainContent = styled.div`
     width: 100%;
     padding-bottom: 10px;
     margin-bottom: 27px;
-    margin-top: 90px;
 `;
 
 const BodyContent = styled.div`
@@ -74,6 +73,7 @@ const ContentWrapper = styled.div`
     @media (max-width: 768px) {
         flex-direction: column;
         width: 100%;
+        align-items: center; /* Center items horizontally */
     }
 `;
 
