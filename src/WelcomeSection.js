@@ -25,8 +25,8 @@ const WelcomeContainer = styled.section`
 `;
 
 const WelcomeTitle = styled.h1`
-  font-size: 2.5em;
-  font-family: 'Georgia', serif;
+  font-size: 2.7em;
+  font-family: 'montserrat', serif;
   color: black;
   margin: 0 0 20px;
     
@@ -41,7 +41,7 @@ const WelcomeTitle = styled.h1`
 
 const WelcomeSubtitle = styled.h2`
   font-size: 2em;
-  font-family: 'Georgia', serif;
+  font-family: 'montserrat', serif;
   color: black;
   margin: 0 0 20px;
 
@@ -69,7 +69,7 @@ const WelcomeSection = () => (
     <WelcomeTitle>Välkommen</WelcomeTitle>
     <WelcomeSubtitle>till samladpolitik</WelcomeSubtitle>
     <WelcomeText>
-      Vi vill göra det enklare för dig som är intresserad av politik. Istället för att behöva leta igenom alla sociala medier för att hitta de senaste uppdateringarna från våra svenska politiker, kan du nu hitta allt du behöver på ett och samma ställe här!
+      Vi vill göra det enklare för dig som är intresserad av politik. Istället för att behöva leta igenom alla sociala medier för att hitta de senaste inläggen från våra svenska politiker, kan du nu hitta allt du behöver på ett och samma ställe här!
     </WelcomeText>
   </WelcomeContainer>
 );

@@ -16,7 +16,7 @@ import mLogo from './moderat.png';
 const GlobalStyle = createGlobalStyle`
     @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
     body {
-        font-family: 'Quicksand', monospace;
+        font-family: 'montserrat', monospace;
         margin: 0;
         padding: 0;
         box-sizing: border-box;
@@ -40,7 +40,7 @@ const MainContent = styled.div`
     padding-top: 5px;
     position: relative;
     z-index: 1;
-    background-color: rgb(255, 255, 255); /* Purple background */
+    background-color: rgb(255, 255, 255);
     color: #100404;
     width: 100%;
     padding-bottom: 10px;
@@ -55,7 +55,7 @@ const BodyContent = styled.div`
     padding: 20px 20px;
     text-align: center;
     position: relative;
-    margin: -30px auto 0; /* Move the content up and center */
+    margin: -30px auto 0;
     
     @media (max-width: 768px) {
         width: 100%;
@@ -73,7 +73,7 @@ const ContentWrapper = styled.div`
     @media (max-width: 768px) {
         flex-direction: column;
         width: 100%;
-        align-items: center; /* Center items horizontally */
+        align-items: center;
     }
 `;
 
@@ -94,7 +94,7 @@ const PartyLogos = styled.div`
     }
 
     img.selected {
-        border-color: #6633cc; /* Highlight selected logo */
+        border-color: #6633cc;
     }
 `;
 
@@ -110,7 +110,7 @@ const logos = {
 };
 
 function App() {
-    const [selectedParties, setSelectedParties] = useState([]); // State to track selected parties
+    const [selectedParties, setSelectedParties] = useState([]);
 
     const handleLogoClick = (party) => {
         setSelectedParties(prevSelected => {
@@ -130,7 +130,7 @@ function App() {
             <MainContent>
                 <BodyContent>
                     <h2>Senaste</h2>
-                    <p>Här finner du det senaste ifrån dessa partier:</p>
+                    <p>Tryck på partiet du vill se inlägg ifrån</p>
                     <PartyLogos>
                         {Object.keys(logos).map(party => (
                             <img
@@ -144,7 +144,7 @@ function App() {
                     </PartyLogos>
                     <ContentWrapper>
                         <ContentContainer filter={selectedParties} />
-                        <RightContainer />
+                        <RightContainer filter={selectedParties} />
                     </ContentWrapper>
                 </BodyContent>
             </MainContent>
