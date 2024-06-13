@@ -1,77 +1,60 @@
 import React from 'react';
 import styled from 'styled-components';
+import { ReactComponent as WelcomeImg } from './welcomeimg.svg'; // Ensure the path is correct
 
 const WelcomeContainer = styled.section`
-  width: 80%;
-  max-width: 1200px;
-  padding: 50px 20px;
-  background-color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start; /* Align items to the left */
-  text-align: left; /* Align text to the left */
-  margin: 0 auto;
+    width: 80%;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: row; // Align items side-by-side
+    align-items: center; // Align items vertically center
+    justify-content: space-between; // Space between text and SVG
+    padding: 50px 20px;
+    background-color: white;
+    margin: 0 auto;
     padding-top: 120px;
     margin-bottom: 1px;
 
-  @media (max-width: 768px) {
-      content-visibility: hidden;
-    width: 91%;
-    padding: 30px 10px;
-    align-items: center; /* Center items horizontally on small screens */
-    text-align: center; /* Center text on small screens */
-  }
+    @media (max-width: 768px) {
+        display: none; // Hide the entire container on small screens
+    }
+`;
+
+const WelcomeTextContainer = styled.div`
+    max-width: 600px; // Limit the width of the text container
 `;
 
 const WelcomeTitle = styled.h1`
-  font-size: 2.7em;
-  font-family: 'montserrat', serif;
-  color: black;
-  margin: 0 0 20px;
-    
-
-  @media (max-width: 768px) {
-    font-size: 1.7em;
-      margin-bottom: 7px;
-      margin-top: 25px;
-      
-  }
+    font-size: 5.5em;
+    color: black;
+    margin: 0 0 20px;
 `;
 
 const WelcomeSubtitle = styled.h2`
-  font-size: 2em;
-  font-family: 'montserrat', serif;
-  color: black;
-  margin: 0 0 20px;
-
-  @media (max-width: 768px) {
-    font-size: 1.2em;
-  }
+    font-size: 2.5em;
+    color: black;
+    margin: 0 0 20px;
+    margin-left: 4px;
+    
+    
 `;
 
 const WelcomeText = styled.p`
-  font-size: 1.2em;
-  color: gray;
-  max-width: 600px;
-
-  @media (max-width: 768px) {
-    font-size: 1em;
-      margin-bottom: 2px;
-      padding-bottom: 1px;
-      width: 90%;
-      
-  }
+    font-size: 1.7em;
+    color: gray;
 `;
 
 const WelcomeSection = () => (
-  <WelcomeContainer>
-    <WelcomeTitle>Välkommen</WelcomeTitle>
-    <WelcomeSubtitle>till samladpolitik</WelcomeSubtitle>
-    <WelcomeText>
-      Vi vill göra det enklare för dig som är intresserad av politik. Istället för att behöva leta igenom alla sociala medier för att hitta de senaste inläggen från våra svenska politiker, kan du nu hitta allt du behöver på ett och samma ställe här!
-    </WelcomeText>
-  </WelcomeContainer>
+    <WelcomeContainer>
+        <WelcomeTextContainer>
+            <WelcomeTitle>Välkommen</WelcomeTitle>
+            <WelcomeSubtitle>till samladpolitik</WelcomeSubtitle>
+            <WelcomeText>
+                Vi vill göra det enklare för dig som är intresserad av politik. Istället för att behöva leta igenom alla sociala medier för att hitta de senaste inläggen från våra svenska politiker, kan du nu hitta allt du behöver på ett och samma ställe här!
+            </WelcomeText>
+        </WelcomeTextContainer>
+        <WelcomeImg style={{ width: '45%', height: 'auto', }} />
+    </WelcomeContainer>
 );
 
 export default WelcomeSection;

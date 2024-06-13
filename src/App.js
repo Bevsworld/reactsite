@@ -15,9 +15,8 @@ import cLogo from './c.png';
 import mLogo from './moderat.png';
 
 const GlobalStyle = createGlobalStyle`
-    @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
     body {
-        font-family: 'montserrat', monospace;
         margin: 0;
         padding: 0;
         box-sizing: border-box;
@@ -32,13 +31,13 @@ const AppContainer = styled.div`
 `;
 
 const MainContent = styled.div`
-    font-family: "Montserrat Medium";
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace
     flex: 1;
     display: flex;
     justify-content: flex-start;
     align-items: center;
     flex-direction: column;
-    padding-top: 5px;
+    padding-top: 45px;
     position: relative;
     z-index: 1;
     background-color: rgb(255, 255, 255);
@@ -70,7 +69,6 @@ const ContentWrapper = styled.div`
     align-items: flex-start;
     width: 100%;
     margin: 0 auto;
-
     @media (max-width: 768px) {
         display: none;
     }

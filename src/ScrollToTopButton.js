@@ -18,7 +18,7 @@ const Button = styled.button`
     bottom: 20px;
     right: 20px;
     display: ${props => (props.visible ? 'block' : 'none')};
-    background-color: rgba(175, 211, 250, 0.76);
+    background-color: rgba(42, 42, 42, 0.33);
     color: white;
     border: none;
     padding: 10px;
@@ -28,8 +28,8 @@ const Button = styled.button`
     animation: ${bounce} 2s infinite;
 
     @media (max-width: 768px) {
-        right: 10px;
-        bottom: 10px;
+        right: 30px;
+        bottom: 50px;
     }
 `;
 

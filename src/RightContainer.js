@@ -15,21 +15,30 @@ import mLogo from './moderat.png';
 const Container = styled.div`
     margin-top: 20px;
     padding: 20px;
-    background: #f0f0f0;
+    background: rgba(245, 245, 245, 0.1);
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 300px;
-    max-height: 500px;  /* Set a maximum height for internal scrolling */
-    overflow-y: auto;   /* Enable vertical scrolling */
+    max-height: 500px; /* Set a maximum height for internal scrolling */
+    overflow-y: auto; /* Enable vertical scrolling */
     margin-left: 26px;
-    text-align: left;
+    text-align: center;
     position: relative;
+    overflow-x: hidden;
 
     @media (max-width: 768px) {
-        width: 100%;
+        width: 85%;
         margin-left: 0;
         height: auto;
         margin-bottom: 20px;
+
+        /* Hide scrollbar for Webkit browsers */
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Hide scrollbar for Firefox */
+        scrollbar-width: none;
     }
 `;
 
@@ -101,14 +110,6 @@ const PostImage = styled.img`
     height: auto;
     border-radius: 8px;
     margin-bottom: 10px;
-    display: ${props => (props.error ? 'none' : 'block')};
-`;
-
-const PostVideo = styled.video`
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
-    margin-bottom: 10px;
 `;
 
 const Caption = styled.p`
@@ -124,7 +125,7 @@ const RightContainer = ({ filter }) => {
     const [posts, setPosts] = useState([]);
     const [visiblePosts, setVisiblePosts] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [showScrollButton, setShowScrollButton] = useState(false);
+    const [showScrollButton, setShowScrollButton] = useState(false); // Declaration of state variable
     const containerRef = useRef(null);
 
     useEffect(() => {
@@ -132,7 +133,7 @@ const RightContainer = ({ filter }) => {
             .then(response => response.json())
             .then(data => {
                 setPosts(data);
-                setVisiblePosts(data.slice(0, 100));
+                setVisiblePosts(data.filter(post => post.type === 'Image').slice(0, 100));
                 setLoading(false);
             })
             .catch(error => console.error('Error fetching posts:', error));
@@ -140,9 +141,9 @@ const RightContainer = ({ filter }) => {
 
     useEffect(() => {
         if (filter.length === 0) {
-            setVisiblePosts(posts.slice(0, 100));
+            setVisiblePosts(posts.filter(post => post.type === 'Image').slice(0, 100));
         } else {
-            const filteredPosts = posts.filter(post => filter.includes(post.party));
+            const filteredPosts = posts.filter(post => filter.includes(post.party) && post.type === 'Image');
             setVisiblePosts(filteredPosts.slice(0, 100));
         }
     }, [filter, posts]);
@@ -154,7 +155,7 @@ const RightContainer = ({ filter }) => {
             if (scrollTop + clientHeight >= scrollHeight - 10) {
                 setVisiblePosts(prev => [
                     ...prev,
-                    ...posts.slice(prev.length, prev.length + 100),
+                    ...posts.filter(post => post.type === 'Image').slice(prev.length, prev.length + 100),
                 ]);
             }
         }
@@ -215,15 +216,12 @@ const RightContainer = ({ filter }) => {
                                 <Timestamp>{new Date(post.timestamp).toLocaleString()}</Timestamp>
                             </UsernameTimestampWrapper>
                         </PostHeader>
-                        {post.type === 'Image' && isValidUrl(post.displayurl) && (
+                        {isValidUrl(post.displayurl) && (
                             <PostImage
                                 src={post.displayurl}
                                 alt="Post image"
                                 onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; }}
                             />
-                        )}
-                        {post.type === 'Reels' && isValidUrl(post.videourl) && (
-                            <PostVideo src={post.videourl} controls />
                         )}
                         {post.caption && <Caption>{post.caption}</Caption>}
                     </Post>

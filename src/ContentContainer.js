@@ -14,16 +14,18 @@ import mLogo from './moderat.png';
 const Container = styled.div`
     margin-top: 20px;
     padding: 20px;
-    background: #f0f0f0;
+    background: rgb(255, 255, 255);
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-left: rgba(62, 66, 65, 0.47);
+    box-shadow: 0 4px 8px rgba(190, 252, 252, 0.22);
     width: 80%;
     height: 500px; /* Fixed height for desktop */
     overflow-y: auto; /* Enable vertical scrolling */
     margin-left: auto;
     margin-right: auto;
     text-align: left;
-    
+    overflow-x: hidden;
+
 
     @media (max-width: 768px) {
         width: 90%;
@@ -108,7 +110,7 @@ const NavigationButtons = styled.div`
 `;
 
 const NavButton = styled.button`
-    background-color: rgb(111, 152, 232);
+    background-color: rgb(120, 190, 239);
     color: white;
     border: none;
     padding: 1px 2px; /* Make the buttons smaller */
@@ -118,7 +120,7 @@ const NavButton = styled.button`
 `;
 
 const PillButton = styled.button`
-    background-color: #6f98e8;
+    background-color: #78beef;
     color: white;
     border: none;
     padding: 2px 7px;
@@ -126,6 +128,8 @@ const PillButton = styled.button`
     margin: 0 5px; /* Add some margin between the arrows and the pill button */
     cursor: pointer;
 `;
+
+
 
 const ContentContainer = ({ filter }) => {
     const [tweets, setTweets] = useState([]);
