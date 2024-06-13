@@ -4,6 +4,7 @@ import Header from './Header';
 import WelcomeSection from './WelcomeSection';
 import ContentContainer from './ContentContainer';
 import RightContainer from './RightContainer';
+import SocialMediaFloat from './SocialMediaFloat';
 import sLogo from './s.png';
 import sdLogo from './sd.png';
 import kdLogo from './kd.png';
@@ -110,6 +111,19 @@ const logos = {
     M: mLogo,
 };
 
+const FloatContainer = styled.div`
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: none; // Initially hide
+
+  @media (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+`;
+
 function App() {
     const [selectedParties, setSelectedParties] = useState([]);
 
@@ -149,6 +163,7 @@ function App() {
                     </ContentWrapper>
                 </BodyContent>
             </MainContent>
+            <SocialMediaFloat />
         </AppContainer>
     );
 }
