@@ -6,12 +6,12 @@ import instagramLogo from './instagram-img.png';
 const ToggleContainer = styled.div`
     display: flex;
     background-color: #ffffff;
-    border-radius: 30px;
-    padding: 5px;
+    border-radius: 6px;
+    padding: 10px;
     width: 105px;
     justify-content: space-around;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    margin: 10px auto;
+    margin: 30px auto;
 
     @media (min-width: 768px) {
         display: none;  // Hide on screens wider than 768px

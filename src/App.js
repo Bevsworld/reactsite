@@ -61,7 +61,15 @@ const BodyContent = styled.div`
         width: 100%;
         padding: 10px;
     }
+    h2{
+        margin-bottom: 30px;
+        margin-top: 50px;
+        font-size: 26px;
+        font-family: Roboto;
+        font-weight: bold;
+    }
 `;
+
 
 const ContentWrapper = styled.div`
     display: flex;

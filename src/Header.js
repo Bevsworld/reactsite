@@ -37,6 +37,8 @@ const Logo = styled.h1`
   font-size: 1.2em;
   color: black;
   font-family: 'Quicksand', sans-serif;
+    cursor: pointer;
+    
 
   span {
     opacity: 0;
