@@ -8,7 +8,7 @@ const ToggleContainer = styled.div`
     background-color: #ffffff;
     border-radius: 30px;
     padding: 5px;
-    width: 100px;
+    width: 105px;
     justify-content: space-around;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     margin: 10px auto;
