@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import Header from './Header';
 import WelcomeSection from './WelcomeSection';
 import ContentContainer from './ContentContainer';
 import RightContainer from './RightContainer';
-import SocialMediaFloat from './SocialMediaFloat';
+import SocialMediaToggle from './SocialMediaToggle';  // Make sure this is correctly imported
 import sLogo from './s.png';
 import sdLogo from './sd.png';
 import kdLogo from './kd.png';
@@ -70,12 +70,9 @@ const ContentWrapper = styled.div`
     align-items: flex-start;
     width: 100%;
     margin: 0 auto;
-    
 
     @media (max-width: 768px) {
-        flex-direction: column;
-        width: 100%;
-        align-items: center;
+        display: none;
     }
 `;
 
@@ -111,21 +108,24 @@ const logos = {
     M: mLogo,
 };
 
-const FloatContainer = styled.div`
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  display: none; // Initially hide
-
-  @media (max-width: 768px) {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-  }
-`;
+function useWindowSize() {
+    const [size, setSize] = useState([window.innerWidth]);
+    useEffect(() => {
+        const handleResize = () => {
+            setSize([window.innerWidth]);
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+    return size;
+}
 
 function App() {
     const [selectedParties, setSelectedParties] = useState([]);
+    const [activeContainer, setActiveContainer] = useState('twitter');
+    const [width] = useWindowSize();
+
+    const isMobile = width < 768; // Assume 768px as the breakpoint between desktop and mobile
 
     const handleLogoClick = (party) => {
         setSelectedParties(prevSelected => {
@@ -145,6 +145,7 @@ function App() {
             <MainContent>
                 <BodyContent>
                     <h2>Senaste</h2>
+                    {isMobile && <SocialMediaToggle active={activeContainer} onToggle={setActiveContainer} />}
                     <p>Tryck på partiet du vill se inlägg ifrån</p>
                     <PartyLogos>
                         {Object.keys(logos).map(party => (
@@ -157,13 +158,16 @@ function App() {
                             />
                         ))}
                     </PartyLogos>
-                    <ContentWrapper>
-                        <ContentContainer filter={selectedParties} />
-                        <RightContainer filter={selectedParties} />
-                    </ContentWrapper>
+                    {isMobile ? (
+                        activeContainer === 'twitter' ? <ContentContainer filter={selectedParties} /> : <RightContainer filter={selectedParties} />
+                    ) : (
+                        <ContentWrapper>
+                            <ContentContainer filter={selectedParties} />
+                            <RightContainer filter={selectedParties} />
+                        </ContentWrapper>
+                    )}
                 </BodyContent>
             </MainContent>
-            <SocialMediaFloat />
         </AppContainer>
     );
 }
