@@ -4,7 +4,8 @@ import Header from './Header';
 import WelcomeSection from './WelcomeSection';
 import ContentContainer from './ContentContainer';
 import RightContainer from './RightContainer';
-import SocialMediaToggle from './SocialMediaToggle';  // Make sure this is correctly imported
+import SocialMediaToggle from './SocialMediaToggle';
+import YoutubeVids from './YoutubeVids'; // Import the new component
 import sLogo from './s.png';
 import sdLogo from './sd.png';
 import kdLogo from './kd.png';
@@ -31,7 +32,7 @@ const AppContainer = styled.div`
 `;
 
 const MainContent = styled.div`
-    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif
     flex: 1;
     display: flex;
     justify-content: flex-start;
@@ -48,8 +49,8 @@ const MainContent = styled.div`
 `;
 
 const BodyContent = styled.div`
-    width: 80%;
-    max-width: 1200px;
+    width: 90%;
+    max-width: 1500px;
     background: #ffffff;
     color: rgba(28, 28, 28, 0.98);
     padding: 20px 20px;
@@ -70,7 +71,6 @@ const BodyContent = styled.div`
         font-weight: bold;
     }
 `;
-
 
 const ContentWrapper = styled.div`
     display: flex;
@@ -166,9 +166,12 @@ function App() {
                         ))}
                     </PartyLogos>
                     {isMobile ? (
-                        activeContainer === 'twitter' ? <ContentContainer filter={selectedParties} /> : <RightContainer filter={selectedParties} />
+                        activeContainer === 'twitter' ? <ContentContainer filter={selectedParties} /> :
+                        activeContainer === 'instagram' ? <RightContainer filter={selectedParties} /> :
+                        <YoutubeVids filter={selectedParties} />
                     ) : (
                         <ContentWrapper>
+                            <YoutubeVids /> {/* Add the new component here */}
                             <ContentContainer filter={selectedParties} />
                             <RightContainer filter={selectedParties} />
                         </ContentWrapper>
