@@ -22,7 +22,7 @@ import mLogo from './moderat.png';
 const StyledContainer = styled(Container)(({ theme }) => ({
     marginTop: theme.spacing(2.5),
     padding: theme.spacing(2.5),
-    backgroundColor: 'rgba(90,142,243,0.06)',
+    backgroundColor: 'rgb(255,255,255)',
     borderRadius: 8,
     borderLeft: 'rgba(62, 66, 65, 0.47)',
     boxShadow: '0 4px 8px rgba(190, 252, 252, 0.22)',
@@ -114,9 +114,7 @@ const NavButton = styled(Button)(({ theme }) => ({
     minWidth: 'auto',
     height: '24px',
 
-    '&:disabled': {
-        backgroundColor: theme.palette.action.disabled,
-    },
+
 }));
 
 const PillButton = styled(Button)({
