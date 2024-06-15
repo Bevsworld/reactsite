@@ -24,7 +24,7 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const AppContainer = styled.div`
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.13);
     color: black;
     display: flex;
     flex-direction: column;
@@ -40,7 +40,7 @@ const MainContent = styled.div`
     padding-top: 45px;
     position: relative;
     z-index: 1;
-    background-color: rgb(255, 255, 255);
+    background-color: rgba(255, 255, 255, 0.07);
     color: #100404;
     width: 100%;
     padding-bottom: 10px;
@@ -50,7 +50,7 @@ const MainContent = styled.div`
 const BodyContent = styled.div`
     width: 80%;
     max-width: 1200px;
-    background: white;
+    background: #ffffff;
     color: rgba(28, 28, 28, 0.98);
     padding: 20px 20px;
     text-align: center;
@@ -61,7 +61,8 @@ const BodyContent = styled.div`
         width: 100%;
         padding: 10px;
     }
-    h2{
+
+    h2 {
         margin-bottom: 30px;
         margin-top: 50px;
         font-size: 26px;
@@ -99,7 +100,7 @@ const PartyLogos = styled.div`
     }
 
     img.selected {
-        border-color: #afd3fa;
+        border-color: #6092f1;
     }
 `;
 

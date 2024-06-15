@@ -48,10 +48,10 @@ const Post = styled.div`
     align-items: flex-start;
     margin-top: 5px;
     margin-bottom: 20px;
-    background: white;
+    background: rgba(221, 62, 62, 0.04);
     padding: 5px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(237, 173, 173, 0.58);
     position: relative;
     overflow-wrap: break-word;
     width: 100%;
@@ -148,18 +148,27 @@ const RightContainer = ({ filter }) => {
         }
     }, [filter, posts]);
 
-    const handleScroll = () => {
-        if (containerRef.current) {
-            const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
-            setShowScrollButton(scrollTop > 200);
-            if (scrollTop + clientHeight >= scrollHeight - 10) {
-                setVisiblePosts(prev => [
-                    ...prev,
-                    ...posts.filter(post => post.type === 'Image').slice(prev.length, prev.length + 100),
-                ]);
+const handleScroll = () => {
+    if (containerRef.current) {
+        const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
+        setShowScrollButton(scrollTop > 200);
+
+        // Check if we have reached the end of the container
+        if (scrollTop + clientHeight >= scrollHeight - 10) {
+            // Only add more posts if they match the current filter
+            if (filter.length > 0) {
+                // Find the next set of posts that match the current party filter and haven't been displayed yet
+                const moreFilteredPosts = posts
+                    .filter(post => post.type === 'Image' && filter.includes(post.party))
+                    .slice(visiblePosts.length, visiblePosts.length + 100);
+
+                if (moreFilteredPosts.length > 0) {
+                    setVisiblePosts(prev => [...prev, ...moreFilteredPosts]);
+                }
             }
         }
-    };
+    }
+};
 
     const scrollToTop = () => {
         if (containerRef.current) {

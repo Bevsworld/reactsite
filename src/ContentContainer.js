@@ -1,7 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react';
-import styled from 'styled-components';
-import Spinner from './Spinner';
-import twitterLogo from './twitter-logo.png'; // Import the Twitter logo
+import {
+    Box,
+    Container,
+    Grid,
+    IconButton,
+    Typography,
+    Button,
+    CircularProgress
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
+import twitterLogo from './twitter-logo.png';
 import sLogo from './s.png';
 import sdLogo from './sd.png';
 import kdLogo from './kd.png';
@@ -11,131 +19,124 @@ import vLogo from './v.png';
 import cLogo from './c.png';
 import mLogo from './moderat.png';
 
-const Container = styled.div`
-    margin-top: 20px;
-    padding: 20px;
-    background: rgb(255, 255, 255);
-    border-radius: 8px;
-    border-left: rgba(62, 66, 65, 0.47);
-    box-shadow: 0 4px 8px rgba(190, 252, 252, 0.22);
-    width: 80%;
-    height: 500px; /* Fixed height for desktop */
-    overflow-y: auto; /* Enable vertical scrolling */
-    margin-left: auto;
-    margin-right: auto;
-    text-align: left;
-    overflow-x: hidden;
+const StyledContainer = styled(Container)(({ theme }) => ({
+    marginTop: theme.spacing(2.5),
+    padding: theme.spacing(2.5),
+    backgroundColor: 'rgba(90,142,243,0.06)',
+    borderRadius: 8,
+    borderLeft: 'rgba(62, 66, 65, 0.47)',
+    boxShadow: '0 4px 8px rgba(190, 252, 252, 0.22)',
+    width: '80%',
+    height: '500px',
+    overflowY: 'auto',
+    textAlign: 'left',
+    overflowX: 'hidden',
+    marginLeft: 'auto',
+    marginRight: 'auto',
 
+    [theme.breakpoints.down('md')]: {
+        width: '90%',
+        marginLeft: 0,
+        height: '500px',
+        marginBottom: theme.spacing(2.5),
+    },
+}));
 
-    @media (max-width: 768px) {
-        width: 90%;
-        margin-left: 0;
-        height: 500px; /* Fixed height for mobile */
-        margin-bottom: 20px;
-    }
-`;
+const StyledTweet = styled(Box)(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'flex-start',
+    fontSize: 17,
+    marginBottom: theme.spacing(2.5),
+    backgroundColor: "white",
+    padding: theme.spacing(1.25, 6.25, 1.25, 1.25),
+    borderRadius: 8,
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+    position: 'relative',
+    overflowWrap: 'break-word',
+}));
 
+const ProfilePictureContainer = styled(Box)({
+    position: 'relative',
+    marginRight: '20px',
+});
 
-const Tweet = styled.div`
-    display: flex;
-    align-items: flex-start;
-    font-size: 15px;
-    margin-bottom: 20px;
-    background: white;
-    padding: 10px 50px 10px 10px; /* Add padding to the right to avoid text overlap with navigation buttons */
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    position: relative; /* To position the Twitter logo */
-    overflow-wrap: break-word; /* Ensure long text breaks appropriately */
-`;
+const ProfilePicture = styled('img')({
+    borderRadius: '50%',
+    width: '50px',
+    height: '50px',
+});
 
-const ProfilePictureContainer = styled.div`
-    position: relative;
-    margin-right: 20px;
-`;
+const PartyLogo = styled('img')({
+    position: 'absolute',
+    bottom: 0,
+    right: '-10px',
+    width: '20px',
+    height: '20px',
+    borderRadius: '50%',
+});
 
-const ProfilePicture = styled.img`
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-`;
+const TweetContent = styled(Box)({
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+});
 
-const PartyLogo = styled.img`
-    position: absolute;
-    bottom: 0;
-    right: -10px;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-`;
+const Timestamp = styled(Typography)({
+    fontSize: '0.8em',
+    color: 'gray',
+    marginTop: '15px',
+});
 
-const TweetContent = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-`;
+const TwitterLogo = styled('img')({
+    position: 'absolute',
+    top: '10px',
+    right: '15px',
+    width: '20px',
+    height: '20px',
+});
 
-const Username = styled.span`
-    font-weight: normal;
-    margin-bottom: 5px;
-`;
+const NavigationButtons = styled(Box)({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    bottom: '5px',
+    right: '5px',
+});
 
-const Timestamp = styled.span`
-    
-    font-size: 0.8em;
-    color: gray;
-    margin-top: 15px;
-`;
+const NavButton = styled(Button)(({ theme }) => ({
+    backgroundColor: 'rgb(120, 190, 239)',
+    color: 'white',
+    padding: '0 6px',
+    borderRadius: '2px',
+    cursor: 'pointer',
+    fontSize: '10px',
+    minWidth: 'auto',
+    height: '24px',
 
-const TwitterLogo = styled.img`
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    width: 20px;
-    height: 20px;
-    
-`;
+    '&:disabled': {
+        backgroundColor: theme.palette.action.disabled,
+    },
+}));
 
-const TweetText = styled.span`
-  white-space: pre-wrap; /* Preserve white spaces and line breaks */
-`;
-
-const NavigationButtons = styled.div`
-    display: flex;
-    align-items: center; /* Center items vertically */
-    justify-content: space-between;
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-`;
-
-const NavButton = styled.button`
-    background-color: rgb(120, 190, 239);
-    color: white;
-    border: none;
-    padding: 1px 2px; /* Make the buttons smaller */
-    border-radius: 2px;
-    cursor: pointer;
-
-`;
-
-const PillButton = styled.button`
-    background-color: #78beef;
-    color: white;
-    border: none;
-    padding: 2px 7px;
-    border-radius: 2px; /* Pill shape */
-    margin: 0 5px; /* Add some margin between the arrows and the pill button */
-    cursor: pointer;
-`;
-
-
+const PillButton = styled(Button)({
+    backgroundColor: '#78beef',
+    color: 'white',
+    padding: '2px 6px',
+    borderRadius: '2px',
+    margin: '0 5px',
+    cursor: 'pointer',
+    fontSize: '10px',
+    height: '24px',
+    minWidth: 'auto',
+});
 
 const ContentContainer = ({ filter }) => {
     const [tweets, setTweets] = useState([]);
     const [visibleTweets, setVisibleTweets] = useState({});
     const [loading, setLoading] = useState(true);
     const [tweetIndexes, setTweetIndexes] = useState({});
+    const [showScrollToTop, setShowScrollToTop] = useState(false);
     const containerRef = useRef(null);
 
     useEffect(() => {
@@ -177,6 +178,21 @@ const ContentContainer = ({ filter }) => {
         }
     }, [filter, tweets]);
 
+    useEffect(() => {
+        const handleScroll = () => {
+            if (containerRef.current) {
+                setShowScrollToTop(containerRef.current.scrollTop > 200);
+            }
+        };
+
+        const container = containerRef.current;
+        container.addEventListener('scroll', handleScroll);
+
+        return () => {
+            container.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
     const handleNextTweet = (username) => {
         setTweetIndexes(prevIndexes => ({
             ...prevIndexes,
@@ -189,6 +205,12 @@ const ContentContainer = ({ filter }) => {
             ...prevIndexes,
             [username]: prevIndexes[username] - 1
         }));
+    };
+
+    const scrollToTop = () => {
+        if (containerRef.current) {
+            containerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     };
 
     const formatTweetText = (text) => {
@@ -228,9 +250,11 @@ const ContentContainer = ({ filter }) => {
     };
 
     return (
-        <Container ref={containerRef}>
+        <StyledContainer ref={containerRef}>
             {loading ? (
-                <Spinner />
+                <Box display="flex" justifyContent="center" alignItems="center" height="100%">
+                    <CircularProgress />
+                </Box>
             ) : (
                 Object.keys(visibleTweets).map((username, index) => {
                     const userTweets = visibleTweets[username];
@@ -238,14 +262,14 @@ const ContentContainer = ({ filter }) => {
                     const currentTweet = userTweets[currentIndex];
 
                     return (
-                        <Tweet key={index}>
+                        <StyledTweet key={index}>
                             <ProfilePictureContainer>
                                 <ProfilePicture src={currentTweet.profilepicture} alt={currentTweet.username} />
                                 {currentTweet.party && <PartyLogo src={getPartyLogo(currentTweet.party)} alt={`${currentTweet.party} logo`} />}
                             </ProfilePictureContainer>
                             <TweetContent>
-                                <Username>@{currentTweet.username}</Username>
-                                <TweetText>{formatTweetText(currentTweet.text)}</TweetText>
+                                <Typography variant="body1">@{currentTweet.username}</Typography>
+                                <Typography variant="body2" component="span">{formatTweetText(currentTweet.text)}</Typography>
                                 <Timestamp>{new Date(currentTweet.timestamp).toLocaleString()}</Timestamp>
                             </TweetContent>
                             <TwitterLogo src={twitterLogo} alt="Twitter logo" />
@@ -256,7 +280,7 @@ const ContentContainer = ({ filter }) => {
                                 >
                                     &lt;
                                 </NavButton>
-                                <PillButton>visa fler</PillButton>
+                                <PillButton>fler</PillButton>
                                 <NavButton
                                     onClick={() => handleNextTweet(username)}
                                     disabled={currentIndex === userTweets.length - 1}
@@ -264,11 +288,11 @@ const ContentContainer = ({ filter }) => {
                                     &gt;
                                 </NavButton>
                             </NavigationButtons>
-                        </Tweet>
+                        </StyledTweet>
                     );
                 })
             )}
-        </Container>
+        </StyledContainer>
     );
 };
 
