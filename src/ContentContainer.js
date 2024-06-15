@@ -47,7 +47,7 @@ const StyledTweet = styled(Box)(({ theme }) => ({
     alignItems: 'flex-start',
     fontSize: 17,
     marginBottom: theme.spacing(2.5),
-    backgroundColor: "white",
+    backgroundColor: "rgba(11,42,246,0.02)",
     padding: theme.spacing(1.25, 6.25, 1.25, 1.25),
     borderRadius: 8,
     boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',

@@ -18,18 +18,18 @@ const Button = styled.button`
     bottom: 20px;
     right: 20px;
     display: ${props => (props.visible ? 'block' : 'none')};
-    background: linear-gradient(135deg, #c2cce6, #6f98e8);
-    color: white;
+    background: "#d3d3d3";
+    color: #454444;
     border: none;
     padding: 12px;
-    border-radius: 50%;
+    border-radius: 20%;
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     animation: ${bounce} 2s infinite;
     transition: background 0.3s;
 
     &:hover {
-        background: linear-gradient(135deg, #e8f0ff, #cad4f3);
+        background: linear-gradient(135deg, #919193, #6a6a6a);
     }
 
     @media (max-width: 768px) {
