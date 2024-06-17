@@ -48,10 +48,10 @@ const Post = styled.div`
     align-items: flex-start;
     margin-top: 5px;
     margin-bottom: 20px;
-    background: rgba(221, 62, 62, 0.04);
+    background: rgba(255, 255, 255, 0.04);
     padding: 5px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(237, 173, 173, 0.58);
+    box-shadow: 0 2px 4px rgba(182, 179, 179, 0.58);
     position: relative;
     overflow-wrap: break-word;
     width: 100%;

@@ -4,10 +4,10 @@ import ContentContainer from './ContentContainer';
 import Pagination from './Pagination';  // Import the Pagination component
 
 const AppContainer = styled.div`
-  background-color: #6633cc;
-  color: white;
-  display: flex;
-  flex-direction: column;
+    background-color: #fdfdfd;
+    color: white;
+    display: flex;
+    flex-direction: column;
 `;
 
 const Header = styled.header`

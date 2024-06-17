@@ -38,10 +38,10 @@ const Video = styled.div`
     align-items: center;
     margin-top: 5px;
     margin-bottom: 20px;
-    background: rgba(221, 62, 62, 0.04);
+    background: rgb(255, 255, 255);
     padding: 10px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(237, 173, 173, 0.58);
+    box-shadow: 0 2px 5px rgba(173, 170, 170, 0.58);
     width: 100%;
 `;
 

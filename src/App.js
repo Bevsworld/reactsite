@@ -66,9 +66,10 @@ const BodyContent = styled.div`
     h2 {
         margin-bottom: 30px;
         margin-top: 50px;
-        font-size: 26px;
-        font-family: Roboto;
-        font-weight: bold;
+        font-size: 19px;
+        font-weight: bolder;
+        
+        
     }
 `;
 
@@ -151,8 +152,8 @@ function App() {
             <WelcomeSection />
             <MainContent>
                 <BodyContent>
-                    <h2>Senaste</h2>
-                    {isMobile && <SocialMediaToggle active={activeContainer} onToggle={setActiveContainer} />}
+
+                    {isMobile && <SocialMediaToggle active={activeContainer} onToggle={setActiveContainer}/>}
                     <p>Tryck på partiet du vill se inlägg ifrån</p>
                     <PartyLogos>
                         {Object.keys(logos).map(party => (
@@ -165,15 +166,16 @@ function App() {
                             />
                         ))}
                     </PartyLogos>
+                    <h2>Senaste</h2>
                     {isMobile ? (
-                        activeContainer === 'twitter' ? <ContentContainer filter={selectedParties} /> :
-                        activeContainer === 'instagram' ? <RightContainer filter={selectedParties} /> :
-                        <YoutubeVids filter={selectedParties} />
+                        activeContainer === 'twitter' ? <ContentContainer filter={selectedParties}/> :
+                            activeContainer === 'instagram' ? <RightContainer filter={selectedParties}/> :
+                                <YoutubeVids filter={selectedParties}/>
                     ) : (
                         <ContentWrapper>
-                            <YoutubeVids /> {/* Add the new component here */}
-                            <ContentContainer filter={selectedParties} />
-                            <RightContainer filter={selectedParties} />
+                            <YoutubeVids/> {/* Add the new component here */}
+                            <ContentContainer filter={selectedParties}/>
+                            <RightContainer filter={selectedParties}/>
                         </ContentWrapper>
                     )}
                 </BodyContent>

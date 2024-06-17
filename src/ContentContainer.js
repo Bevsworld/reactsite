@@ -22,7 +22,7 @@ import mLogo from './moderat.png';
 const StyledContainer = styled(Container)(({ theme }) => ({
     marginTop: theme.spacing(2.5),
     padding: theme.spacing(2.5),
-    backgroundColor: 'rgb(255,255,255)',
+    backgroundColor: 'offwhite',
     borderRadius: 8,
     borderLeft: 'rgba(62, 66, 65, 0.47)',
     boxShadow: '0 4px 8px rgba(190, 252, 252, 0.22)',
@@ -35,7 +35,8 @@ const StyledContainer = styled(Container)(({ theme }) => ({
     marginRight: 'auto',
 
     [theme.breakpoints.down('md')]: {
-        width: '90%',
+        color:"dimgray",
+        width: '97%',
         marginLeft: 0,
         height: '500px',
         marginBottom: theme.spacing(2.5),
@@ -47,12 +48,16 @@ const StyledTweet = styled(Box)(({ theme }) => ({
     alignItems: 'flex-start',
     fontSize: 17,
     marginBottom: theme.spacing(2.5),
-    backgroundColor: "rgba(11,78,246,0.04)",
+    backgroundColor: "offwhite",
     padding: theme.spacing(1.25, 6.25, 1.25, 1.25),
     borderRadius: 8,
-    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+    boxShadow: '0 3px 5px rgba(0, 0, 0, 0.2)',
     position: 'relative',
     overflowWrap: 'break-word',
+    width:"90%",
+
+
+    paddingLeft:0,
 }));
 
 const ProfilePictureContainer = styled(Box)({
@@ -64,6 +69,7 @@ const ProfilePicture = styled('img')({
     borderRadius: '50%',
     width: '50px',
     height: '50px',
+    marginLeft:"9px",
 });
 
 const PartyLogo = styled('img')({
@@ -281,7 +287,6 @@ const ContentContainer = ({ filter }) => {
                                 <PillButton>fler</PillButton>
                                 <NavButton
                                     onClick={() => handleNextTweet(username)}
-                                    disabled={currentIndex === userTweets.length - 1}
                                 >
                                     &gt;
                                 </NavButton>
