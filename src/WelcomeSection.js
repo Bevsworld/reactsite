@@ -21,7 +21,9 @@ const WelcomeContainer = styled.section`
 `;
 
 const WelcomeTextContainer = styled.div`
-    max-width: 600px; // Limit the width of the text container
+    max-width: 50%; // Limit the width of the text container
+    margin-right: 99px; // Add space between the text container and the image
+    flex-shrink: 0; // Prevent shrinking
 `;
 
 const WelcomeTitle = styled.h1`
@@ -35,13 +37,18 @@ const WelcomeSubtitle = styled.h2`
     color: black;
     margin: 0 0 20px;
     margin-left: 4px;
-    
-    
 `;
 
 const WelcomeText = styled.p`
     font-size: 1.7em;
     color: gray;
+`;
+
+const StyledWelcomeImg = styled(WelcomeImg)`
+    width: 600px; // Set a specific width for the image
+    height: auto;
+    flex-shrink: 0; // Prevent shrinking
+    padding-top: 50px;
 `;
 
 const WelcomeSection = () => (
@@ -53,7 +60,7 @@ const WelcomeSection = () => (
                 Vi vill göra det enklare för dig som är intresserad av politik. Istället för att behöva leta igenom alla sociala medier för att hitta de senaste inläggen från våra svenska politiker, kan du nu hitta allt du behöver på ett och samma ställe här!
             </WelcomeText>
         </WelcomeTextContainer>
-        <WelcomeImg style={{ width: '45%', height: 'auto', }} />
+        <StyledWelcomeImg />
     </WelcomeContainer>
 );
 
