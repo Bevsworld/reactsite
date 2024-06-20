@@ -1,5 +1,5 @@
 {
-  "short_name": "Samlad Politik,
+  "short_name": "Samlad Politik",
   "name": "Alla sociala inlägg samlade på en plats",
   "icons": [
     {
@@ -13,7 +13,7 @@
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
+      "src": "favicon.ico",
       "type": "image/png",
       "sizes": "512x512"
     }
