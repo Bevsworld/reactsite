@@ -15,6 +15,7 @@ import vLogo from './v.png';
 import cLogo from './c.png';
 import mLogo from './moderat.png';
 
+
 const GlobalStyle = createGlobalStyle`
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
     body {
@@ -23,6 +24,9 @@ const GlobalStyle = createGlobalStyle`
         box-sizing: border-box;
     }
 `;
+
+
+
 
 const AppContainer = styled.div`
     background-color: rgba(255, 255, 255, 0.13);
@@ -38,7 +42,6 @@ const MainContent = styled.div`
     justify-content: flex-start;
     align-items: center;
     flex-direction: column;
-    padding-top: 45px;
     position: relative;
     z-index: 1;
     background-color: rgba(255, 255, 255, 0.07);
@@ -149,10 +152,12 @@ function App() {
         <AppContainer>
             <GlobalStyle />
             <Header />
+
             <WelcomeSection />
+            {/* Add the WaveDivider component here */}
+
             <MainContent>
                 <BodyContent>
-
                     {isMobile && <SocialMediaToggle active={activeContainer} onToggle={setActiveContainer}/>}
                     <p>Tryck på partiet du vill se inlägg ifrån</p>
                     <PartyLogos>

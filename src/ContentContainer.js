@@ -164,6 +164,12 @@ const ContentContainer = ({ filter }) => {
     }, []);
 
     useEffect(() => {
+        if (containerRef.current) {
+            containerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }, [filter]);
+
+    useEffect(() => {
         if (filter.length === 0) {
             const groupedTweets = tweets.reduce((acc, tweet) => {
                 if (!acc[tweet.username]) acc[tweet.username] = [];
@@ -216,6 +222,7 @@ const ContentContainer = ({ filter }) => {
             containerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
         }
     };
+
 
     const formatTweetText = (text) => {
         const parts = text.split(/(#[\w-]+|@[\w-]+|https?:\/\/[^\s]+)/g);

@@ -147,6 +147,11 @@ const RightContainer = ({ filter }) => {
             setVisiblePosts(filteredPosts.slice(0, 100));
         }
     }, [filter, posts]);
+    useEffect(() => {
+        if (containerRef.current) {
+            containerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }, [filter]);
 
 const handleScroll = () => {
     if (containerRef.current) {
