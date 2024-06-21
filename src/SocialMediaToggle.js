@@ -2,14 +2,15 @@ import React from 'react';
 import styled from 'styled-components';
 import twitterLogo from './twitter-logo.png';
 import instagramLogo from './instagram-img.png';
-import youtubeLogo from './youtube-logo.png'; // Import YouTube logo
+import youtubeLogo from './youtube-logo.png';
+import rgLogo from './rg.png'; // Import the new RG logo
 
 const ToggleContainer = styled.div`
     display: flex;
     background-color: #ffffff;
     border-radius: 6px;
     padding: 10px;
-    width: 150px; /* Increase width to accommodate the third icon */
+    width: 200px; /* Increase width to accommodate the new icon */
     justify-content: space-around;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     margin: 30px auto;
@@ -48,6 +49,12 @@ const SocialMediaToggle = ({ active, onToggle }) => {
                 alt="YouTube"
                 active={active === 'youtube'}
                 onClick={() => onToggle('youtube')}
+            />
+            <Icon
+                src={rgLogo}
+                alt="Riksdagen"
+                active={active === 'riksdagen'}
+                onClick={() => onToggle('riksdagen')}
             />
         </ToggleContainer>
     );

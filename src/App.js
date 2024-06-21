@@ -5,6 +5,7 @@ import WelcomeSection from './WelcomeSection';
 import ContentContainer from './ContentContainer';
 import RightContainer from './RightContainer';
 import SocialMediaToggle from './SocialMediaToggle';
+import RiksdagenContainer from './RiksdagenContainer';
 import YoutubeVids from './YoutubeVids'; // Import the new component
 import sLogo from './s.png';
 import sdLogo from './sd.png';
@@ -15,7 +16,6 @@ import vLogo from './v.png';
 import cLogo from './c.png';
 import mLogo from './moderat.png';
 
-
 const GlobalStyle = createGlobalStyle`
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
     body {
@@ -25,9 +25,6 @@ const GlobalStyle = createGlobalStyle`
     }
 `;
 
-
-
-
 const AppContainer = styled.div`
     background-color: rgba(255, 255, 255, 0.13);
     color: black;
@@ -36,7 +33,7 @@ const AppContainer = styled.div`
 `;
 
 const MainContent = styled.div`
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     flex: 1;
     display: flex;
     justify-content: flex-start;
@@ -71,8 +68,6 @@ const BodyContent = styled.div`
         margin-top: 50px;
         font-size: 19px;
         font-weight: bolder;
-        
-        
     }
 `;
 
@@ -152,13 +147,10 @@ function App() {
         <AppContainer>
             <GlobalStyle />
             <Header />
-
             <WelcomeSection />
-            {/* Add the WaveDivider component here */}
-
             <MainContent>
                 <BodyContent>
-                    {isMobile && <SocialMediaToggle active={activeContainer} onToggle={setActiveContainer}/>}
+                    {isMobile && <SocialMediaToggle active={activeContainer} onToggle={setActiveContainer} />}
                     <p>Tryck på partiet du vill se inlägg ifrån</p>
                     <PartyLogos>
                         {Object.keys(logos).map(party => (
@@ -174,14 +166,18 @@ function App() {
                     <h2>Senaste</h2>
                     {isMobile ? (
                         activeContainer === 'twitter' ? <ContentContainer filter={selectedParties}/> :
-                            activeContainer === 'instagram' ? <RightContainer filter={selectedParties}/> :
-                                <YoutubeVids filter={selectedParties}/>
+                        activeContainer === 'instagram' ? <RightContainer filter={selectedParties}/> :
+                        activeContainer === 'youtube' ? <YoutubeVids filter={selectedParties}/> :
+                        activeContainer === 'riksdagen' ? <RiksdagenContainer filter={selectedParties} /> : null
                     ) : (
-                        <ContentWrapper>
-                            <YoutubeVids/> {/* Add the new component here */}
-                            <ContentContainer filter={selectedParties}/>
-                            <RightContainer filter={selectedParties}/>
-                        </ContentWrapper>
+                        <>
+                            <ContentWrapper>
+                                <YoutubeVids filter={selectedParties}/>
+                                <ContentContainer filter={selectedParties}/>
+                                <RightContainer filter={selectedParties}/>
+                            </ContentWrapper>
+                            <RiksdagenContainer filter={selectedParties} /> {/* Positioned below the ContentWrapper */}
+                        </>
                     )}
                 </BodyContent>
             </MainContent>
