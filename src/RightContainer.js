@@ -125,6 +125,7 @@ const RightContainer = ({ filter }) => {
     const [loading, setLoading] = useState(true);
     const [showScrollButton, setShowScrollButton] = useState(false);
     const [hasMore, setHasMore] = useState(true);
+    const [isFetching, setIsFetching] = useState(false);
     const containerRef = useRef(null);
 
     useEffect(() => {
@@ -134,6 +135,7 @@ const RightContainer = ({ filter }) => {
                 setPosts(data);
                 setVisiblePosts(data.filter(post => post.type === 'Image').slice(0, 15));
                 setLoading(false);
+                setHasMore(data.filter(post => post.type === 'Image').length > 15);
             })
             .catch(error => console.error('Error fetching posts:', error));
     }, []);
@@ -141,9 +143,11 @@ const RightContainer = ({ filter }) => {
     useEffect(() => {
         if (filter.length === 0) {
             setVisiblePosts(posts.filter(post => post.type === 'Image').slice(0, 15));
+            setHasMore(posts.filter(post => post.type === 'Image').length > 15);
         } else {
             const filteredPosts = posts.filter(post => filter.includes(post.party) && post.type === 'Image');
             setVisiblePosts(filteredPosts.slice(0, 15));
+            setHasMore(filteredPosts.length > 15);
         }
     }, [filter, posts]);
 
@@ -158,13 +162,15 @@ const RightContainer = ({ filter }) => {
             const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
             setShowScrollButton(scrollTop > 200);
 
-            if (scrollTop + clientHeight >= scrollHeight - 10 && hasMore) {
+            if (scrollTop + clientHeight >= scrollHeight - 10 && hasMore && !isFetching) {
                 loadMorePosts();
             }
         }
     };
 
     const loadMorePosts = () => {
+        setIsFetching(true);
+
         if (filter.length > 0) {
             const moreFilteredPosts = posts
                 .filter(post => post.type === 'Image' && filter.includes(post.party))
@@ -192,6 +198,8 @@ const RightContainer = ({ filter }) => {
                 setHasMore(false);
             }
         }
+
+        setIsFetching(false);
     };
 
     const scrollToTop = () => {
@@ -264,7 +272,7 @@ const RightContainer = ({ filter }) => {
                     </Post>
                 ))
             )}
-            {hasMore && !loading && <Spinner />}
+            {isFetching && <Spinner />}
             <ScrollToTopButton visible={showScrollButton} onClick={scrollToTop} />
         </Container>
     );
