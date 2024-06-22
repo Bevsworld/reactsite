@@ -7,12 +7,12 @@ import rgLogo from './rg.jpg'; // Import the new RG logo
 
 const ToggleContainer = styled.div`
     display: flex;
+    height: 30px;
     background-color: #ffffff;
     border-radius: 6px;
-    padding: 10px;
-    width: 200px; /* Increase width to accommodate the new icon */
+    width: 100%; /* Increase width to accommodate the new icon */
     justify-content: space-around;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.06);
     margin: 30px auto;
 
     @media (min-width: 768px) {

@@ -7,14 +7,19 @@ const Container = styled.div`
     padding: 20px;
     background: rgba(245, 245, 245, 0.1);
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.23);
+    width: 350px;
     max-height: 500px; /* Set a maximum height for internal scrolling */
     overflow-y: auto; /* Enable vertical scrolling */
     margin-left: 26px;
     text-align: center;
     position: relative;
     overflow-x: hidden;
+    margin-right: 40px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: gainsboro;
+
 
     @media (max-width: 768px) {
         width: 85%;

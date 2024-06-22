@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
+import Footer from './Footer';
 import Header from './Header';
 import WelcomeSection from './WelcomeSection';
 import ContentContainer from './ContentContainer';
@@ -146,7 +147,7 @@ function App() {
     return (
         <AppContainer>
             <GlobalStyle />
-            <Header />
+            <Header/>
             <WelcomeSection />
             <MainContent>
                 <BodyContent>
@@ -181,6 +182,7 @@ function App() {
                     )}
                 </BodyContent>
             </MainContent>
+
         </AppContainer>
     );
 }

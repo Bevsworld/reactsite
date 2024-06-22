@@ -23,16 +23,20 @@ const StyledContainer = styled(Container)(({ theme }) => ({
     marginTop: theme.spacing(2.5),
     padding: theme.spacing(2.5),
     backgroundColor: 'offwhite',
+    paddingTop:"30px",
     borderRadius: 8,
-    borderLeft: 'rgba(62, 66, 65, 0.47)',
-    boxShadow: '0 4px 8px rgba(190, 252, 252, 0.22)',
-    width: '50%',
+    width: '60%',
     height: '500px',
     overflowY: 'auto',
     textAlign: 'left',
     overflowX: 'hidden',
     marginLeft: 'auto',
     marginRight: 'auto',
+    borderStyle:"solid",
+    borderWidth:"1px",
+    borderColor:"gainsboro",
+    boxShadow:"0 4px 8px rgba(0, 0, 0, 0.10)",
+
 
     [theme.breakpoints.down('md')]: {
         color:"dimgray",
@@ -55,9 +59,10 @@ const StyledTweet = styled(Box)(({ theme }) => ({
     position: 'relative',
     overflowWrap: 'break-word',
     width:"90%",
-
-
-    paddingLeft:0,
+    paddingLeft: 0,
+    borderLeftStyle:"solid",
+    borderLeftWidth:"2px",
+    borderLeftColor:"lightslategrey",
 }));
 
 const ProfilePictureContainer = styled(Box)({
@@ -70,6 +75,10 @@ const ProfilePicture = styled('img')({
     width: '50px',
     height: '50px',
     marginLeft:"9px",
+    borderStyle:"solid",
+    borderWidth:"1px",
+    borderColor:"gainsboro",
+    boxShadow: '0 3px 5px rgba(0, 0, 0, 0.2)',
 });
 
 const PartyLogo = styled('img')({
@@ -106,34 +115,25 @@ const NavigationButtons = styled(Box)({
     alignItems: 'center',
     justifyContent: 'center',
     position: 'absolute',
-    bottom: '5px',
-    right: '5px',
+    bottom: '9px',
+    right: '9px',
+    margin:"5px",
 });
 
-const NavButton = styled(Button)(({ theme }) => ({
+const NavButton = styled(Button)(({ theme, disabled }) => ({
     backgroundColor: 'rgb(120, 190, 239)',
     color: 'white',
     padding: '0 6px',
     borderRadius: '2px',
-    cursor: 'pointer',
+    cursor: disabled ? 'not-allowed' : 'pointer',
     fontSize: '10px',
     minWidth: 'auto',
-    height: '24px',
-
-
+    height: '14px',
+    opacity: disabled ? 0.5 : 1,
+    pointerEvents: disabled ? 'none' : 'auto',
 }));
 
-const PillButton = styled(Button)({
-    backgroundColor: '#78beef',
-    color: 'white',
-    padding: '2px 6px',
-    borderRadius: '2px',
-    margin: '0 5px',
-    cursor: 'pointer',
-    fontSize: '10px',
-    height: '24px',
-    minWidth: 'auto',
-});
+
 
 const ContentContainer = ({ filter }) => {
     const [tweets, setTweets] = useState([]);
@@ -288,10 +288,11 @@ const ContentContainer = ({ filter }) => {
                                 <NavButton
                                     onClick={() => handlePreviousTweet(username)}
                                     disabled={currentIndex === 0}
+                                    sx={{ marginRight: '4px' }}
                                 >
                                     &lt;
                                 </NavButton>
-                                <PillButton>fler</PillButton>
+
                                 <NavButton
                                     onClick={() => handleNextTweet(username)}
                                 >

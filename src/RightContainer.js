@@ -17,14 +17,17 @@ const Container = styled.div`
     padding: 20px;
     background: rgba(245, 245, 245, 0.1);
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.14);
+    width: 350px;
     max-height: 500px;
     overflow-y: auto;
     margin-left: 26px;
     text-align: center;
     position: relative;
     overflow-x: hidden;
+    border-style: solid;
+    border-width: 1px;
+    border-color: gainsboro;
 
     @media (max-width: 768px) {
         width: 85%;
@@ -127,12 +130,15 @@ const RightContainer = ({ filter }) => {
     const [showScrollButton, setShowScrollButton] = useState(false);
     const containerRef = useRef(null);
 
+    const BATCH_SIZE = 25;
+
     useEffect(() => {
         fetch('https://apiserver-real.onrender.com/igposts')
             .then(response => response.json())
             .then(data => {
-                setPosts(data);
-                setVisiblePosts(data.slice(0, 100));
+                const filteredData = data.filter(post => post.type !== 'Reels');
+                setPosts(filteredData);
+                setVisiblePosts(filteredData.slice(0, BATCH_SIZE));
                 setLoading(false);
             })
             .catch(error => console.error('Error fetching posts:', error));
@@ -140,10 +146,10 @@ const RightContainer = ({ filter }) => {
 
     const updateVisiblePosts = useCallback(() => {
         if (filter.length === 0) {
-            setVisiblePosts(posts.slice(0, 100));
+            setVisiblePosts(posts.slice(0, BATCH_SIZE));
         } else {
             const filteredPosts = posts.filter(post => filter.includes(post.party));
-            setVisiblePosts(filteredPosts.slice(0, 100));
+            setVisiblePosts(filteredPosts.slice(0, BATCH_SIZE));
         }
     }, [filter, posts]);
 
@@ -164,7 +170,7 @@ const RightContainer = ({ filter }) => {
 
             if (scrollTop + clientHeight >= scrollHeight - 10) {
                 if (visiblePosts.length < posts.length) {
-                    const morePosts = posts.slice(visiblePosts.length, visiblePosts.length + 100);
+                    const morePosts = posts.slice(visiblePosts.length, visiblePosts.length + BATCH_SIZE);
                     setVisiblePosts(prev => [...prev, ...morePosts]);
                 }
             }
@@ -227,11 +233,10 @@ const RightContainer = ({ filter }) => {
                             </UsernameTimestampWrapper>
                         </PostHeader>
                         {isValidUrl(post.displayurl) && (
-                            <PostImage
-                                src={post.displayurl}
-                                alt="Post image"
-                                onError={(e) => (e.target.style.display = 'none')}
-                            />
+                            <>
+                                {console.log('Image URL:', post.displayurl)}
+                                <RetryableImage src={post.displayurl} alt="Post image" />
+                            </>
                         )}
                         {post.caption && <Caption>{post.caption}</Caption>}
                     </Post>
@@ -240,6 +245,23 @@ const RightContainer = ({ filter }) => {
             <ScrollToTopButton visible={showScrollButton} onClick={scrollToTop} />
         </Container>
     );
+};
+
+const RetryableImage = ({ src, alt }) => {
+    const [retryCount, setRetryCount] = useState(0);
+    const maxRetries = 3;
+
+    const handleError = (e) => {
+        console.error('Error loading image:', src);
+        if (retryCount < maxRetries) {
+            setRetryCount(prev => prev + 1);
+            e.target.src = `${src}?retry=${retryCount + 1}`;
+        } else {
+            e.target.style.display = 'none';
+        }
+    };
+
+    return <PostImage src={src} alt={alt} onError={handleError} />;
 };
 
 export default RightContainer;
