@@ -108,6 +108,7 @@ const PostImage = styled.img`
     height: auto;
     border-radius: 8px;
     margin-bottom: 10px;
+    display: ${props => (props.error ? 'none' : 'block')};
 `;
 
 const Caption = styled.p`
@@ -121,7 +122,6 @@ const Caption = styled.p`
 
 const RightContainer = ({ filter }) => {
     const [posts, setPosts] = useState([]);
-    const [filteredPosts, setFilteredPosts] = useState([]);
     const [visiblePosts, setVisiblePosts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showScrollButton, setShowScrollButton] = useState(false);
@@ -132,22 +132,19 @@ const RightContainer = ({ filter }) => {
             .then(response => response.json())
             .then(data => {
                 setPosts(data);
-                setFilteredPosts(data.filter(post => post.type === 'Image'));
-                setVisiblePosts(data.filter(post => post.type === 'Image').slice(0, 100));
+                setVisiblePosts(data.slice(0, 100));
                 setLoading(false);
             })
             .catch(error => console.error('Error fetching posts:', error));
     }, []);
 
     const updateVisiblePosts = useCallback(() => {
-        let newFilteredPosts;
         if (filter.length === 0) {
-            newFilteredPosts = posts.filter(post => post.type === 'Image');
+            setVisiblePosts(posts.slice(0, 100));
         } else {
-            newFilteredPosts = posts.filter(post => filter.includes(post.party) && post.type === 'Image');
+            const filteredPosts = posts.filter(post => filter.includes(post.party));
+            setVisiblePosts(filteredPosts.slice(0, 100));
         }
-        setFilteredPosts(newFilteredPosts);
-        setVisiblePosts(newFilteredPosts.slice(0, 100));
     }, [filter, posts]);
 
     useEffect(() => {
@@ -166,15 +163,13 @@ const RightContainer = ({ filter }) => {
             setShowScrollButton(scrollTop > 200);
 
             if (scrollTop + clientHeight >= scrollHeight - 10) {
-                if (filteredPosts.length > visiblePosts.length) {
-                    setVisiblePosts(prev => [
-                        ...prev,
-                        ...filteredPosts.slice(prev.length, prev.length + 100),
-                    ]);
+                if (visiblePosts.length < posts.length) {
+                    const morePosts = posts.slice(visiblePosts.length, visiblePosts.length + 100);
+                    setVisiblePosts(prev => [...prev, ...morePosts]);
                 }
             }
         }
-    }, [filteredPosts, visiblePosts]);
+    }, [posts, visiblePosts]);
 
     const scrollToTop = () => {
         if (containerRef.current) {
@@ -214,10 +209,6 @@ const RightContainer = ({ filter }) => {
         }
     };
 
-    const handleImageError = (post) => {
-        setVisiblePosts((prevVisiblePosts) => prevVisiblePosts.filter((p) => p !== post));
-    };
-
     return (
         <Container ref={containerRef} onScroll={handleScroll}>
             {loading ? (
@@ -239,7 +230,7 @@ const RightContainer = ({ filter }) => {
                             <PostImage
                                 src={post.displayurl}
                                 alt="Post image"
-                                onError={() => handleImageError(post)}
+                                onError={(e) => (e.target.style.display = 'none')}
                             />
                         )}
                         {post.caption && <Caption>{post.caption}</Caption>}
