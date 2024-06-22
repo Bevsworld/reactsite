@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import styled from 'styled-components';
 import Spinner from './Spinner';
 import instagramLogo from './instagram-img.png';
@@ -19,8 +19,8 @@ const Container = styled.div`
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 300px;
-    max-height: 500px; /* Set a maximum height for internal scrolling */
-    overflow-y: auto; /* Enable vertical scrolling */
+    max-height: 500px;
+    overflow-y: auto;
     margin-left: 26px;
     text-align: center;
     position: relative;
@@ -32,12 +32,10 @@ const Container = styled.div`
         height: auto;
         margin-bottom: 20px;
 
-        /* Hide scrollbar for Webkit browsers */
         &::-webkit-scrollbar {
             display: none;
         }
 
-        /* Hide scrollbar for Firefox */
         scrollbar-width: none;
     }
 `;
@@ -125,7 +123,7 @@ const RightContainer = ({ filter }) => {
     const [posts, setPosts] = useState([]);
     const [visiblePosts, setVisiblePosts] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [showScrollButton, setShowScrollButton] = useState(false); // Declaration of state variable
+    const [showScrollButton, setShowScrollButton] = useState(false);
     const containerRef = useRef(null);
 
     useEffect(() => {
@@ -139,7 +137,7 @@ const RightContainer = ({ filter }) => {
             .catch(error => console.error('Error fetching posts:', error));
     }, []);
 
-    useEffect(() => {
+    const updateVisiblePosts = useCallback(() => {
         if (filter.length === 0) {
             setVisiblePosts(posts.filter(post => post.type === 'Image').slice(0, 100));
         } else {
@@ -149,21 +147,22 @@ const RightContainer = ({ filter }) => {
     }, [filter, posts]);
 
     useEffect(() => {
+        updateVisiblePosts();
+    }, [updateVisiblePosts]);
+
+    useEffect(() => {
         if (containerRef.current) {
             containerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
         }
     }, [filter]);
 
-    const handleScroll = () => {
+    const handleScroll = useCallback(() => {
         if (containerRef.current) {
             const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
             setShowScrollButton(scrollTop > 200);
 
-            // Check if we have reached the end of the container
             if (scrollTop + clientHeight >= scrollHeight - 10) {
-                // Only add more posts if they match the current filter
                 if (filter.length > 0) {
-                    // Find the next set of posts that match the current party filter and haven't been displayed yet
                     const moreFilteredPosts = posts
                         .filter(post => post.type === 'Image' && filter.includes(post.party))
                         .slice(visiblePosts.length, visiblePosts.length + 100);
@@ -174,7 +173,7 @@ const RightContainer = ({ filter }) => {
                 }
             }
         }
-    };
+    }, [filter, posts, visiblePosts]);
 
     const scrollToTop = () => {
         if (containerRef.current) {
