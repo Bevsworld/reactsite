@@ -19,8 +19,8 @@ const Container = styled.div`
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 300px;
-    max-height: 500px; /* Set a maximum height for internal scrolling */
-    overflow-y: auto; /* Enable vertical scrolling */
+    max-height: 500px;
+    overflow-y: auto;
     margin-left: 26px;
     text-align: center;
     position: relative;
@@ -32,12 +32,10 @@ const Container = styled.div`
         height: auto;
         margin-bottom: 20px;
 
-        /* Hide scrollbar for Webkit browsers */
         &::-webkit-scrollbar {
             display: none;
         }
 
-        /* Hide scrollbar for Firefox */
         scrollbar-width: none;
     }
 `;
@@ -126,7 +124,7 @@ const RightContainer = ({ filter }) => {
     const [visiblePosts, setVisiblePosts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showScrollButton, setShowScrollButton] = useState(false);
-    const [hasMore, setHasMore] = useState(true); // To track if there are more posts to load
+    const [hasMore, setHasMore] = useState(true);
     const containerRef = useRef(null);
 
     useEffect(() => {
