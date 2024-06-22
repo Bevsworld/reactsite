@@ -53,8 +53,9 @@ const Grid = styled.div`
     margin-top: 30px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    gap: 60px;
     justify-content: center;
+    margin-bottom: 30px;
 
     @media (max-width: 768px) {
         grid-template-columns: 1fr;
@@ -75,6 +76,7 @@ const VideoContainer = styled.div`
     max-width: 300px;
     margin: auto;
     position: relative;
+    margin-top: 20px;
 `;
 
 const Video = styled.video`
@@ -164,6 +166,19 @@ const RiksdagenContainer = ({ filter }) => {
     const containerRef = useRef(null);
 
     useEffect(() => {
+        fetchVideos();
+    }, []);
+
+    useEffect(() => {
+        const filteredVideos = filterVideos(videos, filter);
+        setVisibleVideos(filteredVideos.slice(0, 9)); // Show initial 9 filtered videos
+        if (containerRef.current) {
+            containerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }, [filter, videos]);
+
+    const fetchVideos = () => {
+        setLoading(true);
         fetch('https://apiserver-real.onrender.com/riksdagen')
             .then(response => {
                 if (!response.ok) {
@@ -173,21 +188,23 @@ const RiksdagenContainer = ({ filter }) => {
             })
             .then(data => {
                 const validVideos = data.filter(item => item && item.linksforapi && item.linksforapi.every(link => link !== null));
-                setVideos(validVideos);
-                setVisibleVideos(validVideos.slice(0, 9)); // Show initial 9 videos
+                const videosWithMetadata = validVideos.flatMap(videoData =>
+                    videoData.linksforapi.map(videoUrl => ({
+                        id: `${videoData.id}_${videoUrl}`, // Assign a unique ID
+                        ...videoData,
+                        videoUrl,
+                        ...extractNameAndParty(videoUrl)
+                    }))
+                );
+                setVideos(videosWithMetadata);
+                setVisibleVideos(videosWithMetadata.slice(0, 9)); // Show initial 9 videos
                 setLoading(false);
             })
             .catch(error => {
                 console.error('Error fetching videos:', error);
                 setLoading(false); // Stop the spinner in case of an error
             });
-    }, []);
-
-    useEffect(() => {
-        if (containerRef.current) {
-            containerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-    }, [filter]);
+    };
 
     const handleScroll = () => {
         if (containerRef.current) {
@@ -203,8 +220,9 @@ const RiksdagenContainer = ({ filter }) => {
 
     const loadMoreVideos = () => {
         setVisibleVideos(prevVisible => {
+            const filteredVideos = filterVideos(videos, filter);
             const currentIndex = prevVisible.length;
-            const moreVideos = videos.slice(currentIndex, currentIndex + 9);
+            const moreVideos = filteredVideos.slice(currentIndex, currentIndex + 9);
             return [...prevVisible, ...moreVideos];
         });
     };
@@ -239,13 +257,11 @@ const RiksdagenContainer = ({ filter }) => {
         }
     };
 
-    const filteredVideos = visibleVideos.filter(video =>
-        filter.length === 0 ||
-        video.linksforapi.some(url => {
-            const { party } = extractNameAndParty(url);
-            return filter.includes(party);
-        })
-    );
+    const filterVideos = (videos, filter) => {
+        return videos.filter(video =>
+            filter.length === 0 || filter.includes(video.party)
+        );
+    };
 
     return (
         <Container>
@@ -253,30 +269,24 @@ const RiksdagenContainer = ({ filter }) => {
                 {loading ? (
                     <Spinner />
                 ) : (
-                    filteredVideos.length > 0 ? (
+                    visibleVideos.length > 0 ? (
                         <Grid>
-                            {filteredVideos.map((videoData, index) => (
-                                videoData.linksforapi.map((videoUrl, videoIndex) => {
-                                    const { name, party } = extractNameAndParty(videoUrl);
-                                    if (name === 'Unknown') return null; // Skip the video if the name is 'Unknown'
-                                    if (filter.length > 0 && !filter.includes(party)) return null; // Skip videos that don't match the selected filter
-                                    return (
-                                        <VideoContainer key={`${index}-${videoIndex}`}>
-                                            <VideoTypeBadge>{videoData.type}</VideoTypeBadge>
-                                            <VideoDate>{new Date(videoData.date).toLocaleDateString()}</VideoDate>
-                                            <Video controls onError={handleVideoError}>
-                                                <source src={videoUrl} type="video/mp4" />
-                                                Your browser does not support the video tag.
-                                            </Video>
-
-                                            <VideoMeta>
-                                                <VideoTitle>{name} ({party})
-                                                {party && <PartyLogo src={partyLogos[party]} alt={`${party} logo`} />}</VideoTitle>
-                                                <div>{videoData.title}</div>
-                                            </VideoMeta>
-                                        </VideoContainer>
-                                    );
-                                })
+                            {visibleVideos.map((videoData) => (
+                                <VideoContainer key={videoData.id}>
+                                    <VideoTypeBadge>{videoData.type}</VideoTypeBadge>
+                                    <VideoDate>{new Date(videoData.date).toLocaleDateString()}</VideoDate>
+                                    <Video controls onError={handleVideoError}>
+                                        <source src={videoData.videoUrl} type="video/mp4" />
+                                        Your browser does not support the video tag.
+                                    </Video>
+                                    <VideoMeta>
+                                        <VideoTitle>
+                                            {videoData.name} ({videoData.party})
+                                            {videoData.party && <PartyLogo src={partyLogos[videoData.party]} alt={`${videoData.party} logo`} />}
+                                        </VideoTitle>
+                                        <div>{videoData.title}</div>
+                                    </VideoMeta>
+                                </VideoContainer>
                             ))}
                         </Grid>
                     ) : (

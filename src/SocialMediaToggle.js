@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import twitterLogo from './twitter-logo.png';
 import instagramLogo from './instagram-img.png';
 import youtubeLogo from './youtube-logo.png';
-import rgLogo from './rg.png'; // Import the new RG logo
+import rgLogo from './rg.jpg'; // Import the new RG logo
 
 const ToggleContainer = styled.div`
     display: flex;
