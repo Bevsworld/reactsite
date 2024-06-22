@@ -121,6 +121,7 @@ const Caption = styled.p`
 
 const RightContainer = ({ filter }) => {
     const [posts, setPosts] = useState([]);
+    const [filteredPosts, setFilteredPosts] = useState([]);
     const [visiblePosts, setVisiblePosts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showScrollButton, setShowScrollButton] = useState(false);
@@ -131,6 +132,7 @@ const RightContainer = ({ filter }) => {
             .then(response => response.json())
             .then(data => {
                 setPosts(data);
+                setFilteredPosts(data.filter(post => post.type === 'Image'));
                 setVisiblePosts(data.filter(post => post.type === 'Image').slice(0, 100));
                 setLoading(false);
             })
@@ -138,12 +140,14 @@ const RightContainer = ({ filter }) => {
     }, []);
 
     const updateVisiblePosts = useCallback(() => {
+        let newFilteredPosts;
         if (filter.length === 0) {
-            setVisiblePosts(posts.filter(post => post.type === 'Image').slice(0, 100));
+            newFilteredPosts = posts.filter(post => post.type === 'Image');
         } else {
-            const filteredPosts = posts.filter(post => filter.includes(post.party) && post.type === 'Image');
-            setVisiblePosts(filteredPosts.slice(0, 100));
+            newFilteredPosts = posts.filter(post => filter.includes(post.party) && post.type === 'Image');
         }
+        setFilteredPosts(newFilteredPosts);
+        setVisiblePosts(newFilteredPosts.slice(0, 100));
     }, [filter, posts]);
 
     useEffect(() => {
@@ -162,18 +166,15 @@ const RightContainer = ({ filter }) => {
             setShowScrollButton(scrollTop > 200);
 
             if (scrollTop + clientHeight >= scrollHeight - 10) {
-                if (filter.length > 0) {
-                    const moreFilteredPosts = posts
-                        .filter(post => post.type === 'Image' && filter.includes(post.party))
-                        .slice(visiblePosts.length, visiblePosts.length + 100);
-
-                    if (moreFilteredPosts.length > 0) {
-                        setVisiblePosts(prev => [...prev, ...moreFilteredPosts]);
-                    }
+                if (filteredPosts.length > visiblePosts.length) {
+                    setVisiblePosts(prev => [
+                        ...prev,
+                        ...filteredPosts.slice(prev.length, prev.length + 100),
+                    ]);
                 }
             }
         }
-    }, [filter, posts, visiblePosts]);
+    }, [filteredPosts, visiblePosts]);
 
     const scrollToTop = () => {
         if (containerRef.current) {
