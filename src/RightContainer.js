@@ -253,6 +253,3 @@ const RightContainer = ({ filter }) => {
 }; 
 
 export default RightContainer;
-``` 
-
-Save this content in your `RightContainer.js` file. This updated code includes various checks and improvements to ensure that filtering works correctly and handles potential issues.
