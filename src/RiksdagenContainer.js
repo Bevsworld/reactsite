@@ -241,21 +241,22 @@ const RiksdagenContainer = ({ filter }) => {
         event.target.parentNode.appendChild(fallback);
     };
 
-    const extractNameAndParty = (url) => {
-        try {
-            const decodedUrl = decodeURIComponent(url);
-            const regex = /_(.+?)\((.+?)\)\.mp4$/;
-            const match = regex.exec(decodedUrl);
-            if (match) {
-                const name = match[1].replace(/^\d+/, '').replace(/_/g, ' ').trim();
-                const party = match[2];
-                return { name: name !== '' ? name : 'Unknown', party };
-            }
-            return { name: 'Unknown', party: null };
-        } catch (e) {
-            return { name: 'Unknown', party: null };
+ const extractNameAndParty = (url) => {
+    try {
+        const decodedUrl = decodeURIComponent(url);
+        const regex = /_(.+?)_(\w+)\.mp4$/;
+        const match = regex.exec(decodedUrl);
+        if (match) {
+            const nameParts = match[1].split('_').slice(1); // Skip the first part which is likely a number
+            const name = nameParts.join(' ').trim();
+            const party = match[2];
+            return { name: name !== '' ? name : 'Unknown', party };
         }
-    };
+        return { name: 'Unknown', party: null };
+    } catch (e) {
+        return { name: 'Unknown', party: null };
+    }
+};
 
     const filterVideos = (videos, filter) => {
         return videos.filter(video =>
