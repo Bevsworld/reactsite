@@ -259,7 +259,6 @@ const RiksdagenContainer = ({ filter }) => {
         return { number: 'Unknown', name: 'Unknown', party: 'Unknown' };
     }
 };
-
     const filterVideos = (videos, filter) => {
         return videos.filter(video =>
             filter.length === 0 || filter.includes(video.party)
