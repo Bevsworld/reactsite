@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
 import Footer from './Footer';
 import Header from './Header';
@@ -7,7 +8,7 @@ import ContentContainer from './ContentContainer';
 import RightContainer from './RightContainer';
 import SocialMediaToggle from './SocialMediaToggle';
 import RiksdagenContainer from './RiksdagenContainer';
-import YoutubeVids from './YoutubeVids'; // Import the new component
+import YoutubeVids from './YoutubeVids';
 import sLogo from './s.png';
 import sdLogo from './sd.png';
 import kdLogo from './kd.png';
@@ -145,45 +146,51 @@ function App() {
     };
 
     return (
-        <AppContainer>
-            <GlobalStyle />
-            <Header/>
-            <WelcomeSection />
-            <MainContent>
-                <BodyContent>
-                    {isMobile && <SocialMediaToggle active={activeContainer} onToggle={setActiveContainer} />}
-                    <p>Tryck på partiet du vill se inlägg ifrån</p>
-                    <PartyLogos>
-                        {Object.keys(logos).map(party => (
-                            <img
-                                key={party}
-                                src={logos[party]}
-                                alt={`${party} logo`}
-                                className={selectedParties.includes(party) ? 'selected' : ''}
-                                onClick={() => handleLogoClick(party)}
+        <Router>
+            <AppContainer>
+                <GlobalStyle />
+                <Header/>
+                <WelcomeSection />
+                <MainContent>
+                    <BodyContent>
+                        {isMobile && <SocialMediaToggle active={activeContainer} onToggle={setActiveContainer} />}
+                        <p>Tryck på partiet du vill se inlägg ifrån</p>
+                        <PartyLogos>
+                            {Object.keys(logos).map(party => (
+                                <img
+                                    key={party}
+                                    src={logos[party]}
+                                    alt={`${party} logo`}
+                                    className={selectedParties.includes(party) ? 'selected' : ''}
+                                    onClick={() => handleLogoClick(party)}
+                                />
+                            ))}
+                        </PartyLogos>
+                        <h2>Senaste</h2>
+                        <Routes>
+                            <Route path="/youtube" element={<YoutubeVids filter={selectedParties} />} />
+                            <Route path="/twitter" element={<ContentContainer filter={selectedParties} />} />
+                            <Route path="/instagram" element={<RightContainer filter={selectedParties} />} />
+                            <Route path="/riksdagen" element={<RiksdagenContainer filter={selectedParties} />} />
+                            <Route path="/" element={
+                                isMobile ? (
+                                    activeContainer === 'twitter' ? <ContentContainer filter={selectedParties}/> :
+                                    activeContainer === 'instagram' ? <RightContainer filter={selectedParties}/> :
+                                    activeContainer === 'youtube' ? <YoutubeVids filter={selectedParties}/> :
+                                    activeContainer === 'riksdagen' ? <RiksdagenContainer filter={selectedParties} /> : null
+                                ) : (
+                                    <ContentWrapper>
+                                        <YoutubeVids filter={selectedParties}/>
+                                        <ContentContainer filter={selectedParties}/>
+                                        <RightContainer filter={selectedParties}/>
+                                    </ContentWrapper>
+                                )}
                             />
-                        ))}
-                    </PartyLogos>
-                    <h2>Senaste</h2>
-                    {isMobile ? (
-                        activeContainer === 'twitter' ? <ContentContainer filter={selectedParties}/> :
-                        activeContainer === 'instagram' ? <RightContainer filter={selectedParties}/> :
-                        activeContainer === 'youtube' ? <YoutubeVids filter={selectedParties}/> :
-                        activeContainer === 'riksdagen' ? <RiksdagenContainer filter={selectedParties} /> : null
-                    ) : (
-                        <>
-                            <ContentWrapper>
-                                <YoutubeVids filter={selectedParties}/>
-                                <ContentContainer filter={selectedParties}/>
-                                <RightContainer filter={selectedParties}/>
-                            </ContentWrapper>
-                            <RiksdagenContainer filter={selectedParties} /> {/* Positioned below the ContentWrapper */}
-                        </>
-                    )}
-                </BodyContent>
-            </MainContent>
-
-        </AppContainer>
+                        </Routes>
+                    </BodyContent>
+                </MainContent>
+            </AppContainer>
+        </Router>
     );
 }
 
