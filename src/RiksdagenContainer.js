@@ -248,10 +248,9 @@ const RiksdagenContainer = ({ filter }) => {
         const match = regex.exec(decodedUrl);
         if (match) {
             const number = match[1];
-            const firstName = match[2];
-            const lastName = match[3];
+            const nameParts = match.slice(2, 4);
             const party = match[4];
-            const name = `${firstName} ${lastName}`;
+            const name = nameParts.join(' ');
             return { number, name, party };
         }
         return { number: 'Unknown', name: 'Unknown', party: 'Unknown' };
