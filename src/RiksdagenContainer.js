@@ -244,7 +244,7 @@ const RiksdagenContainer = ({ filter }) => {
  const extractNameAndParty = (url) => {
     try {
         const decodedUrl = decodeURIComponent(url);
-        const regex = /_(\d+)_(.+?)_(.+?)_(.+?)\.mp4$/;
+        const regex = /(\d+)_(.+?)_(.+?)_(.+?)\.mp4$/;
         const match = regex.exec(decodedUrl);
         if (match) {
             const number = match[1];
