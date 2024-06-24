@@ -244,17 +244,19 @@ const RiksdagenContainer = ({ filter }) => {
  const extractNameAndParty = (url) => {
     try {
         const decodedUrl = decodeURIComponent(url);
-        const regex = /_(.+?)_(\w+)\.mp4$/;
+        const regex = /_(\d+)_(.+?)_(.+?)_(.+?)\.mp4$/;
         const match = regex.exec(decodedUrl);
         if (match) {
-            const nameParts = match[1].split('_').slice(1); // Skip the first part which is likely a number
-            const name = nameParts.join(' ').trim();
-            const party = match[2];
-            return { name: name !== '' ? name : 'Unknown', party };
+            const number = match[1];
+            const firstName = match[2];
+            const lastName = match[3];
+            const party = match[4];
+            const name = `${firstName} ${lastName}`;
+            return { number, name, party };
         }
-        return { name: 'Unknown', party: null };
+        return { number: 'Unknown', name: 'Unknown', party: 'Unknown' };
     } catch (e) {
-        return { name: 'Unknown', party: null };
+        return { number: 'Unknown', name: 'Unknown', party: 'Unknown' };
     }
 };
 
