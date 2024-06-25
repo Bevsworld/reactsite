@@ -180,14 +180,16 @@ function App() {
                                     activeContainer === 'riksdagen' ? <RiksdagenContainer filter={selectedParties} /> : null
                                 ) : (
                                     <ContentWrapper>
-                                        <YoutubeVids filter={selectedParties}/>
+                                        <RiksdagenContainer filter={selectedParties}/>
                                         <ContentContainer filter={selectedParties}/>
                                         <RightContainer filter={selectedParties}/>
                                     </ContentWrapper>
+
                                 )}
                             />
                         </Routes>
                     </BodyContent>
+
                 </MainContent>
             </AppContainer>
         </Router>

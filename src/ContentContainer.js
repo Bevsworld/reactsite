@@ -25,7 +25,7 @@ const StyledContainer = styled(Container)(({ theme }) => ({
     backgroundColor: 'offwhite',
     paddingTop:"30px",
     borderRadius: 8,
-    width: '60%',
+    width: '900px',
     height: '500px',
     overflowY: 'auto',
     textAlign: 'left',
@@ -42,7 +42,8 @@ const StyledContainer = styled(Container)(({ theme }) => ({
         color:"dimgray",
         width: '97%',
         marginLeft: 0,
-        height: '500px',
+        height: '700px',
+        borderColor:"white",
         marginBottom: theme.spacing(2.5),
     },
 }));

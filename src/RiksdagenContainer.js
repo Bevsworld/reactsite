@@ -13,26 +13,30 @@ import cLogo from './c.png';
 import mLogo from './moderat.png';
 
 const Container = styled.div`
-    margin-top: 50px;
+    margin-top: 20px;
     padding: 20px;
     background: rgba(245, 245, 245, 0.1);
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 85%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.14);
+    width: 350px;
     max-height: 500px;
-    margin-left: auto;
-    margin-right: auto;
+    overflow-y: auto;
+    margin-right: 60px;
     text-align: center;
     position: relative;
+    overflow-x: hidden;
+    border-style: solid;
+    border-width: 1px;
+    border-color: gainsboro;
 
     @media (max-width: 768px) {
-        max-height: none;
-        height: auto;
+        width: 100%;
+        height: 700px;
     }
 `;
 
 const ScrollableContent = styled.div`
-    max-height: 400px;
+    max-height: 600px;
     overflow-y: auto;
     padding-right: 15px;
 
@@ -50,16 +54,16 @@ const ScrollableContent = styled.div`
 `;
 
 const Grid = styled.div`
-    margin-top: 30px;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 60px;
+    grid-template-columns: repeat(1, 1fr);
     justify-content: center;
     margin-bottom: 30px;
+    
 
     @media (max-width: 768px) {
         grid-template-columns: 1fr;
         margin: 0;
+        grid-gap: 30px;
     }
 `;
 
@@ -170,35 +174,32 @@ const RiksdagenContainer = ({ filter }) => {
     }, []);
 
     useEffect(() => {
-       
-const fetchVideos = () => {
-    setLoading(true);
-    fetch('https://apiserver-real.onrender.com/riksdagen')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            const validVideos = data.filter(item => item && item.linksforapi && item.linksforapi.length > 1);
-            const videosWithMetadata = validVideos.flatMap(videoData =>
-                videoData.linksforapi.slice(1).map(videoUrl => ({
-                    id: `${videoData.id}_${videoUrl}`, // Assign a unique ID
-                    ...videoData,
-                    videoUrl,
-                    ...extractNameAndParty(videoUrl)
-                }))
-            );
-            setVideos(videosWithMetadata);
-            setVisibleVideos(videosWithMetadata.slice(0, 9)); // Show initial 9 videos
-            setLoading(false);
-        })
-        .catch(error => {
-            console.error('Error fetching videos:', error);
-            setLoading(false); // Stop the spinner in case of an error
-        });
-};
+        const filteredVideos = filterVideos(videos, filter);
+        setVisibleVideos(filteredVideos.slice(0, 9)); // Show initial 9 filtered videos
+        if (containerRef.current) {
+            containerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }, [filter, videos]);
+
+    const fetchVideos = () => {
+        setLoading(true);
+        fetch('https://apiserver-real.onrender.com/riksdagen')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                const validVideos = data.filter(item => item && item.linksforapi && item.linksforapi.every(link => link !== null));
+                const videosWithMetadata = validVideos.flatMap(videoData =>
+                    videoData.linksforapi.map(videoUrl => ({
+                        id: `${videoData.id}_${videoUrl}`, // Assign a unique ID
+                        ...videoData,
+                        videoUrl,
+                        ...extractNameAndParty(videoUrl)
+                    }))
+                );
                 setVideos(videosWithMetadata);
                 setVisibleVideos(videosWithMetadata.slice(0, 9)); // Show initial 9 videos
                 setLoading(false);
@@ -244,7 +245,7 @@ const fetchVideos = () => {
         event.target.parentNode.appendChild(fallback);
     };
 
- const extractNameAndParty = (url) => {
+const extractNameAndParty = (url) => {
     try {
         const decodedUrl = decodeURIComponent(url);
         const regex = /(\d+)_([^_]+(?:_[^_]+)*)_(\w+)\.mp4$/;
@@ -261,6 +262,8 @@ const fetchVideos = () => {
         return { number: 'Unknown', name: 'Unknown', party: 'Unknown' };
     }
 };
+
+
     const filterVideos = (videos, filter) => {
         return videos.filter(video =>
             filter.length === 0 || filter.includes(video.party)
