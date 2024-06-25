@@ -178,24 +178,33 @@ const RiksdagenContainer = ({ filter }) => {
     }, [filter, videos]);
 
     const fetchVideos = () => {
-        setLoading(true);
-        fetch('https://apiserver-real.onrender.com/riksdagen')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                const validVideos = data.filter(item => item && item.linksforapi && item.linksforapi.every(link => link !== null));
-                const videosWithMetadata = validVideos.flatMap(videoData =>
-                    videoData.linksforapi.map(videoUrl => ({
-                        id: `${videoData.id}_${videoUrl}`, // Assign a unique ID
-                        ...videoData,
-                        videoUrl,
-                        ...extractNameAndParty(videoUrl)
-                    }))
-                );
+    setLoading(true);
+    fetch('https://apiserver-real.onrender.com/riksdagen')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            const validVideos = data.filter(item => item && item.linksforapi && item.linksforapi.length > 1);
+            const videosWithMetadata = validVideos.flatMap(videoData =>
+                videoData.linksforapi.slice(1).map(videoUrl => ({
+                    id: `${videoData.id}_${videoUrl}`, // Assign a unique ID
+                    ...videoData,
+                    videoUrl,
+                    ...extractNameAndParty(videoUrl)
+                }))
+            );
+            setVideos(videosWithMetadata);
+            setVisibleVideos(videosWithMetadata.slice(0, 9)); // Show initial 9 videos
+            setLoading(false);
+        })
+        .catch(error => {
+            console.error('Error fetching videos:', error);
+            setLoading(false); // Stop the spinner in case of an error
+        });
+};
                 setVideos(videosWithMetadata);
                 setVisibleVideos(videosWithMetadata.slice(0, 9)); // Show initial 9 videos
                 setLoading(false);
