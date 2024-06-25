@@ -170,14 +170,7 @@ const RiksdagenContainer = ({ filter }) => {
     }, []);
 
     useEffect(() => {
-        const filteredVideos = filterVideos(videos, filter);
-        setVisibleVideos(filteredVideos.slice(0, 9)); // Show initial 9 filtered videos
-        if (containerRef.current) {
-            containerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-    }, [filter, videos]);
-
-    const fetchVideos = () => {
+        const fetchVideos = () => {
     setLoading(true);
     fetch('https://apiserver-real.onrender.com/riksdagen')
         .then(response => {
