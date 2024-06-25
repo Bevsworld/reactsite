@@ -34,9 +34,15 @@
     "postbuild": "react-snap"
   },
 
-    "reactSnap": {
-    "inlineCss": true
+"reactSnap": {
+  "inlineCss": true,
+  "puppeteer": {
+    "args": ["--no-sandbox", "--disable-setuid-sandbox"]
   },
+  "fixWebpackChunksIssue": false,
+  "puppeteerScript": "puppeteer-script.js",
+  "skipThirdPartyRequests": true
+},
 
   "eslintConfig": {
     "extends": [
