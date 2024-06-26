@@ -56,7 +56,6 @@ const Grid = styled.div`
     grid-template-columns: repeat(1, 1fr);
     justify-content: center;
     margin-bottom: 30px;
-    
 
     @media (max-width: 768px) {
         grid-template-columns: 1fr;
@@ -255,6 +254,7 @@ const RiksdagenContainer = ({ filter }) => {
     };
 
     const handleVideoError = (event) => {
+        console.error('Video error:', event);
         event.target.style.display = 'none';
         const fallback = document.createElement('div');
         fallback.className = 'fallback';
@@ -281,6 +281,7 @@ const RiksdagenContainer = ({ filter }) => {
             }
             return { number: 'Unknown', name: 'Unknown', party: 'Unknown' };
         } catch (e) {
+            console.error('Error decoding URL:', e);
             return { number: 'Unknown', name: 'Unknown', party: 'Unknown' };
         }
     };
