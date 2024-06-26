@@ -18,9 +18,8 @@ const Container = styled.div`
     background: rgba(245, 245, 245, 0.1);
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.14);
-    width: 350px;
-    max-height: 500px;
-    overflow-y: auto;
+    width: 100%;
+    max-width: 600px;
     margin-right: 60px;
     text-align: center;
     position: relative;
@@ -31,7 +30,6 @@ const Container = styled.div`
 
     @media (max-width: 768px) {
         width: 100%;
-        height: 700px;
     }
 `;
 
@@ -81,6 +79,16 @@ const VideoContainer = styled.div`
     margin: auto;
     position: relative;
     margin-top: 20px;
+`;
+
+const VideoPlayerContainer = styled.div`
+    margin-bottom: 20px;
+    background: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    position: relative;
 `;
 
 const Video = styled.video`
@@ -133,11 +141,9 @@ const VideoTypeBadge = styled.div`
 `;
 
 const VideoDate = styled.div`
-    position: absolute;
-    top: -20px;
-    right: 10px;
     font-size: 0.9em;
     color: #666;
+    margin-top: 5px;
 `;
 
 const FallbackMessage = styled.div`
@@ -281,9 +287,8 @@ const RiksdagenContainer = ({ filter }) => {
     return (
         <Container>
             {selectedVideo && (
-                <VideoContainer>
+                <VideoPlayerContainer>
                     <VideoTypeBadge>{selectedVideo.type}</VideoTypeBadge>
-                    <VideoDate>{new Date(selectedVideo.date).toLocaleDateString()}</VideoDate>
                     <Video controls onError={handleVideoError}>
                         <source src={selectedVideo.videoUrl} type="video/mp4" />
                         Your browser does not support the video tag.
@@ -294,8 +299,9 @@ const RiksdagenContainer = ({ filter }) => {
                             {selectedVideo.party && <PartyLogo src={partyLogos[selectedVideo.party]} alt={`${selectedVideo.party} logo`} />}
                         </VideoTitle>
                         <div>{selectedVideo.title}</div>
+                        <VideoDate>{new Date(selectedVideo.date).toLocaleDateString()}</VideoDate>
                     </VideoMeta>
-                </VideoContainer>
+                </VideoPlayerContainer>
             )}
             <ScrollableContent ref={containerRef} onScroll={handleScroll}>
                 {loading ? (
