@@ -13,6 +13,7 @@
     "pica": "^9.0.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-icons": "^5.2.1",
     "react-image": "^4.1.0",
     "react-player": "^2.16.0",
     "react-router-config": "^5.1.1",
@@ -33,17 +34,18 @@
     "postinstall": "ls node_modules",
     "postbuild": "react-snap"
   },
-
-"reactSnap": {
-  "inlineCss": true,
-  "puppeteer": {
-    "args": ["--no-sandbox", "--disable-setuid-sandbox"]
+  "reactSnap": {
+    "inlineCss": true,
+    "puppeteer": {
+      "args": [
+        "--no-sandbox",
+        "--disable-setuid-sandbox"
+      ]
+    },
+    "fixWebpackChunksIssue": false,
+    "puppeteerScript": "puppeteer-script.js",
+    "skipThirdPartyRequests": true
   },
-  "fixWebpackChunksIssue": false,
-  "puppeteerScript": "puppeteer-script.js",
-  "skipThirdPartyRequests": true
-},
-
   "eslintConfig": {
     "extends": [
       "react-app",

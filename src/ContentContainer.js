@@ -1,12 +1,9 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import {
     Box,
     Container,
-    Grid,
-    IconButton,
+    CircularProgress,
     Typography,
-    Button,
-    CircularProgress
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import twitterLogo from './twitter-logo.png';
@@ -19,32 +16,45 @@ import vLogo from './v.png';
 import cLogo from './c.png';
 import mLogo from './moderat.png';
 
-const StyledContainer = styled(Container)(({ theme }) => ({
+const BATCH_SIZE = 25;
+
+const StyledOuterContainer = styled(Container)(({ theme }) => ({
     marginTop: theme.spacing(2.5),
     padding: theme.spacing(2.5),
     backgroundColor: 'offwhite',
-    paddingTop:"30px",
     borderRadius: 8,
-    width: '900px',
-    height: '500px',
-    overflowY: 'auto',
+    width: '100%',
+    maxWidth: '350px',
+    height: 'auto',
+    overflow: 'hidden',
     textAlign: 'left',
-    overflowX: 'hidden',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    borderStyle:"solid",
-    borderWidth:"1px",
-    borderColor:"gainsboro",
-    boxShadow:"0 4px 8px rgba(0, 0, 0, 0.10)",
-
+    margin: '0 auto', // Centers the container
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    borderColor: 'gainsboro',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.10)',
 
     [theme.breakpoints.down('md')]: {
-        color:"dimgray",
-        width: '97%',
+        color: 'dimgray',
+        width: '100%',
         marginLeft: 0,
-        height: '700px',
-        borderColor:"white",
+        height: 'auto',
+        borderColor: 'white',
         marginBottom: theme.spacing(2.5),
+    },
+}));
+
+const StyledInnerContainer = styled(Box)(({ theme }) => ({
+    maxHeight: '500px',
+    overflowY: 'auto',
+    paddingRight: theme.spacing(1),
+
+    '&::-webkit-scrollbar': {
+        width: '8px',
+    },
+    '&::-webkit-scrollbar-thumb': {
+        backgroundColor: 'rgba(0, 0, 0, 0.1)',
+        borderRadius: '4px',
     },
 }));
 
@@ -54,16 +64,16 @@ const StyledTweet = styled(Box)(({ theme }) => ({
     fontSize: 17,
     marginBottom: theme.spacing(2.5),
     backgroundColor: "offwhite",
-    padding: theme.spacing(1.25, 6.25, 1.25, 1.25),
+    padding: theme.spacing(1.25),
     borderRadius: 8,
     boxShadow: '0 3px 5px rgba(0, 0, 0, 0.2)',
     position: 'relative',
     overflowWrap: 'break-word',
-    width:"90%",
+    width: '100%',
     paddingLeft: 0,
-    borderLeftStyle:"solid",
-    borderLeftWidth:"2px",
-    borderLeftColor:"lightslategrey",
+    borderLeftStyle: 'solid',
+    borderLeftWidth: '2px',
+    borderLeftColor: 'lightslategrey',
 }));
 
 const ProfilePictureContainer = styled(Box)({
@@ -75,10 +85,10 @@ const ProfilePicture = styled('img')({
     borderRadius: '50%',
     width: '50px',
     height: '50px',
-    marginLeft:"9px",
-    borderStyle:"solid",
-    borderWidth:"1px",
-    borderColor:"gainsboro",
+    marginLeft: "9px",
+    borderStyle: "solid",
+    borderWidth: "1px",
+    borderColor: "gainsboro",
     boxShadow: '0 3px 5px rgba(0, 0, 0, 0.2)',
 });
 
@@ -111,37 +121,10 @@ const TwitterLogo = styled('img')({
     height: '20px',
 });
 
-const NavigationButtons = styled(Box)({
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'absolute',
-    bottom: '9px',
-    right: '9px',
-    margin:"5px",
-});
-
-const NavButton = styled(Button)(({ theme, disabled }) => ({
-    backgroundColor: 'rgb(120, 190, 239)',
-    color: 'white',
-    padding: '0 6px',
-    borderRadius: '2px',
-    cursor: disabled ? 'not-allowed' : 'pointer',
-    fontSize: '10px',
-    minWidth: 'auto',
-    height: '14px',
-    opacity: disabled ? 0.5 : 1,
-    pointerEvents: disabled ? 'none' : 'auto',
-}));
-
-
-
 const ContentContainer = ({ filter }) => {
     const [tweets, setTweets] = useState([]);
-    const [visibleTweets, setVisibleTweets] = useState({});
+    const [visibleTweets, setVisibleTweets] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [tweetIndexes, setTweetIndexes] = useState({});
-    const [showScrollToTop, setShowScrollToTop] = useState(false);
     const containerRef = useRef(null);
 
     useEffect(() => {
@@ -149,94 +132,44 @@ const ContentContainer = ({ filter }) => {
             .then(response => response.json())
             .then(data => {
                 setTweets(data);
-                const groupedTweets = data.reduce((acc, tweet) => {
-                    if (!acc[tweet.username]) acc[tweet.username] = [];
-                    acc[tweet.username].push(tweet);
-                    return acc;
-                }, {});
-                setVisibleTweets(groupedTweets);
-                setTweetIndexes(Object.keys(groupedTweets).reduce((acc, username) => {
-                    acc[username] = 0;
-                    return acc;
-                }, {}));
+                setVisibleTweets(data.slice(0, BATCH_SIZE));
                 setLoading(false);
             })
             .catch(error => console.error('Error fetching tweets:', error));
     }, []);
 
-    useEffect(() => {
-        if (containerRef.current) {
-            containerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-    }, [filter]);
-
-    useEffect(() => {
-        if (filter.length === 0) {
-            const groupedTweets = tweets.reduce((acc, tweet) => {
-                if (!acc[tweet.username]) acc[tweet.username] = [];
-                acc[tweet.username].push(tweet);
-                return acc;
-            }, {});
-            setVisibleTweets(groupedTweets);
-        } else {
-            const filteredTweets = tweets.filter(tweet => filter.includes(tweet.party));
-            const groupedFilteredTweets = filteredTweets.reduce((acc, tweet) => {
-                if (!acc[tweet.username]) acc[tweet.username] = [];
-                acc[tweet.username].push(tweet);
-                return acc;
-            }, {});
-            setVisibleTweets(groupedFilteredTweets);
-        }
-    }, [filter, tweets]);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            if (containerRef.current) {
-                setShowScrollToTop(containerRef.current.scrollTop > 200);
-            }
-        };
-
-        const container = containerRef.current;
-        container.addEventListener('scroll', handleScroll);
-
-        return () => {
-            container.removeEventListener('scroll', handleScroll);
-        };
-    }, []);
-
-    const handleNextTweet = (username) => {
-        setTweetIndexes(prevIndexes => ({
-            ...prevIndexes,
-            [username]: prevIndexes[username] + 1
-        }));
-    };
-
-    const handlePreviousTweet = (username) => {
-        setTweetIndexes(prevIndexes => ({
-            ...prevIndexes,
-            [username]: prevIndexes[username] - 1
-        }));
-    };
-
-    const scrollToTop = () => {
-        if (containerRef.current) {
-            containerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-    };
-
-
-    const formatTweetText = (text) => {
-        const parts = text.split(/(#[\w-]+|@[\w-]+|https?:\/\/[^\s]+)/g);
-        return parts.map((part, index) => {
-            if (part.match(/#[\w-]+|@[\w-]+/)) {
-                return <strong key={index}>{part}</strong>;
-            } else if (part.match(/https?:\/\/[^\s]+/)) {
-                return <a key={index} href={part} target="_blank" rel="noopener noreferrer" style={{ color: 'blue' }}>{part}</a>;
-            } else {
-                return part;
-            }
+    const loadMoreTweets = useCallback(() => {
+        setVisibleTweets(prevVisibleTweets => {
+            const startIndex = prevVisibleTweets.length;
+            const nextTweets = tweets.slice(startIndex, startIndex + BATCH_SIZE);
+            return [...prevVisibleTweets, ...nextTweets];
         });
+    }, [tweets]);
+
+    const handleScroll = () => {
+        if (containerRef.current) {
+            const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
+            if (scrollTop + clientHeight >= scrollHeight - 10) {
+                loadMoreTweets();
+            }
+        }
     };
+
+    useEffect(() => {
+        if (containerRef.current) {
+            containerRef.current.addEventListener('scroll', handleScroll);
+        }
+        return () => {
+            if (containerRef.current) {
+                containerRef.current.removeEventListener('scroll', handleScroll);
+            }
+        };
+    }, [handleScroll]);
+
+    useEffect(() => {
+        const filteredTweets = filter.length === 0 ? tweets : tweets.filter(tweet => filter.includes(tweet.party));
+        setVisibleTweets(filteredTweets.slice(0, BATCH_SIZE));
+    }, [filter, tweets]);
 
     const getPartyLogo = (party) => {
         switch (party) {
@@ -262,49 +195,32 @@ const ContentContainer = ({ filter }) => {
     };
 
     return (
-        <StyledContainer ref={containerRef}>
+        <StyledOuterContainer>
             {loading ? (
                 <Box display="flex" justifyContent="center" alignItems="center" height="100%">
                     <CircularProgress />
                 </Box>
             ) : (
-                Object.keys(visibleTweets).map((username, index) => {
-                    const userTweets = visibleTweets[username];
-                    const currentIndex = tweetIndexes[username];
-                    const currentTweet = userTweets[currentIndex];
-
-                    return (
+                <StyledInnerContainer ref={containerRef}>
+                    {visibleTweets.map((tweet, index) => (
                         <StyledTweet key={index}>
                             <ProfilePictureContainer>
-                                <ProfilePicture src={currentTweet.profilepicture} alt={currentTweet.username} />
-                                {currentTweet.party && <PartyLogo src={getPartyLogo(currentTweet.party)} alt={`${currentTweet.party} logo`} />}
+                                <ProfilePicture src={tweet.profilepicture} alt={tweet.username} />
+                                {tweet.party && <PartyLogo src={getPartyLogo(tweet.party)} alt={`${tweet.party} logo`} />}
                             </ProfilePictureContainer>
                             <TweetContent>
-                                <Typography variant="body1">@{currentTweet.username}</Typography>
-                                <Typography variant="body2" component="span">{formatTweetText(currentTweet.text)}</Typography>
-                                <Timestamp>{new Date(currentTweet.timestamp).toLocaleString()}</Timestamp>
+                                <Typography variant="body1">@{tweet.username}</Typography>
+                                <Typography variant="body2" component="span">
+                                    {tweet.text}
+                                </Typography>
+                                <Timestamp>{new Date(tweet.timestamp).toLocaleString()}</Timestamp>
                             </TweetContent>
                             <TwitterLogo src={twitterLogo} alt="Twitter logo" />
-                            <NavigationButtons>
-                                <NavButton
-                                    onClick={() => handlePreviousTweet(username)}
-                                    disabled={currentIndex === 0}
-                                    sx={{ marginRight: '4px' }}
-                                >
-                                    &lt;
-                                </NavButton>
-
-                                <NavButton
-                                    onClick={() => handleNextTweet(username)}
-                                >
-                                    &gt;
-                                </NavButton>
-                            </NavigationButtons>
                         </StyledTweet>
-                    );
-                })
+                    ))}
+                </StyledInnerContainer>
             )}
-        </StyledContainer>
+        </StyledOuterContainer>
     );
 };
 

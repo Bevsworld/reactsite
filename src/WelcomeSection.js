@@ -14,7 +14,7 @@ const WelcomeContainer = styled.section`
     background-color: white;
     margin: 0 auto;
     padding-top: 120px;
-    margin-bottom: 1px;
+    padding-bottom: 150px;
 
     @media (max-width: 768px) {
         display: none; // Hide the entire container on small screens
@@ -64,6 +64,7 @@ const Button = styled.button`
     cursor: pointer;
     margin-top: 10px;
     margin-left: 8px;
+    
 
     transition: background-color 0.3s ease;
 

@@ -20,10 +20,14 @@ import mLogo from './moderat.png';
 
 const GlobalStyle = createGlobalStyle`
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+    *, *::before, *::after {
+        box-sizing: border-box;
+    }
     body {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
+        overflow-x: hidden; /* Prevents horizontal scroll */
     }
 `;
 
@@ -32,13 +36,17 @@ const AppContainer = styled.div`
     color: black;
     display: flex;
     flex-direction: column;
+    align-items: center; /* Center child elements horizontally */
+    width: 100%;
+    overflow-x: hidden; /* Prevents horizontal scroll */
 `;
 
+
 const MainContent = styled.div`
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     flex: 1;
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
     flex-direction: column;
     position: relative;
@@ -75,12 +83,17 @@ const BodyContent = styled.div`
 
 const ContentWrapper = styled.div`
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: flex-start;
     width: 100%;
+    max-width: 1500px;
     margin: 0 auto;
+    padding: 20px;
+
     @media (max-width: 768px) {
-        display: none;
+        flex-direction: column;
+        align-items: center;
+        padding: 0; /* Adjust padding for mobile view */
     }
 `;
 
@@ -175,19 +188,19 @@ function App() {
                             <Route path="/" element={
                                 isMobile ? (
                                     activeContainer === 'twitter' ? <ContentContainer filter={selectedParties}/> :
-                                    activeContainer === 'instagram' ? <RightContainer filter={selectedParties}/> :
-                                    activeContainer === 'youtube' ? <YoutubeVids filter={selectedParties}/> :
-                                    activeContainer === 'riksdagen' ? <RiksdagenContainer filter={selectedParties} /> : null
+                                        activeContainer === 'instagram' ? <RightContainer filter={selectedParties}/> :
+                                            activeContainer === 'youtube' ? <YoutubeVids filter={selectedParties}/> :
+                                                activeContainer === 'riksdagen' ? <RiksdagenContainer filter={selectedParties} /> : null
                                 ) : (
                                     <ContentWrapper>
                                         <RiksdagenContainer filter={selectedParties}/>
                                         <ContentContainer filter={selectedParties}/>
                                         <RightContainer filter={selectedParties}/>
                                     </ContentWrapper>
-
                                 )}
                             />
                         </Routes>
+
                     </BodyContent>
 
                 </MainContent>

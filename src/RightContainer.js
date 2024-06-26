@@ -18,10 +18,11 @@ const Container = styled.div`
     background: rgba(245, 245, 245, 0.1);
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.14);
-    width: 350px;
+    width: 100%;
+    max-width: 350px;
     max-height: 500px;
     overflow-y: auto;
-    margin-left: 26px;
+    margin: 0 auto; /* Centers the container */
     text-align: center;
     position: relative;
     overflow-x: hidden;
@@ -30,7 +31,7 @@ const Container = styled.div`
     border-color: gainsboro;
 
     @media (max-width: 768px) {
-        width: 85%;
+        width: 100%;
         margin-left: 0;
         height: auto;
         margin-bottom: 20px;
@@ -57,6 +58,7 @@ const Post = styled.div`
     overflow-wrap: break-word;
     width: 100%;
 `;
+
 
 const ProfilePicture = styled.img`
     border-radius: 50%;

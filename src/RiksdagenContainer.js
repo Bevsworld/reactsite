@@ -14,34 +14,53 @@ import mLogo from './moderat.png';
 
 const Container = styled.div`
     margin-top: 20px;
-    padding: 20px;
-    background: rgba(245, 245, 245, 0.1);
+    background: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.14);
     width: 100%;
-    max-width: 600px;
-    margin-right: 60px;
+    max-width: 350px;
     text-align: center;
     position: relative;
-    overflow-x: hidden;
-    border-style: solid;
-    border-width: 1px;
-    border-color: gainsboro;
+    overflow: hidden;
+    border: none;
 
     @media (max-width: 768px) {
-        width: 100%;
+        max-width: 100%;
     }
 `;
 
-const ScrollableContent = styled.div`
-    max-height: 600px;
-    overflow-y: auto;
-    padding-right: 15px;
+const VideoPlayerContainer = styled.div`
+    background: #000;
+    padding: 0;
+    border-radius: 8px 8px 0 0;
+    width: 100%;
+    position: relative;
 
     @media (max-width: 768px) {
-        max-height: 500px;
-        height: 500px;
-        margin-bottom: 20px;
+        padding: 5px;
+    }
+`;
+
+const Video = styled.video`
+    width: 100%;
+    height: auto;
+    border-radius: 8px 8px 0 0;
+    display: block;
+    margin: 0;
+    padding: 0;
+`;
+
+const ScrollableContent = styled.div`
+    max-height: 500px;
+    overflow-y: auto;
+    padding: 0 15px;
+    margin-bottom: 20px;
+
+    @media (max-width: 768px) {
+        max-height: 400px;
+        height: 400px;
+        padding: 0 10px;
+        margin-bottom: 10px;
 
         &::-webkit-scrollbar {
             display: none;
@@ -52,97 +71,64 @@ const ScrollableContent = styled.div`
 `;
 
 const Grid = styled.div`
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    justify-content: center;
-    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 0;
 
     @media (max-width: 768px) {
-        grid-template-columns: 1fr;
-        margin: 0;
-        grid-gap: 30px;
+        padding: 10px;
     }
 `;
 
 const VideoContainer = styled.div`
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    background: #fff;
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow-wrap: break-word;
-    width: 100%;
-    max-width: 300px;
-    margin: auto;
-    position: relative;
-    margin-top: 20px;
-`;
-
-const VideoPlayerContainer = styled.div`
-    margin-bottom: 20px;
+    align-items: center;
     background: #fff;
     padding: 10px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 100%;
-    position: relative;
 `;
 
-const Video = styled.video`
-    width: 100%;
-    height: auto;
+const VideoThumbnail = styled.div`
+    width: 60px;
+    height: 60px;
+    background: #333;
     border-radius: 8px;
-    margin-bottom: 10px;
-`;
-
-const VideoHeader = styled.div`
     display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+
+    img {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+    }
+`;
+
+const VideoInfo = styled.div`
+    flex-grow: 1;
+    text-align: left;
+    display: flex;
+    align-items: center;
     justify-content: space-between;
-    align-items: center;
-    width: 100%;
-`;
-
-const VideoTitleWrapper = styled.div`
-    display: flex;
-    align-items: center;
 `;
 
 const VideoTitle = styled.h3`
-    font-size: 1.2em;
-    margin: 5px 0;
+    font-size: 1em;
+    margin: 0;
+    color: #000;
     cursor: pointer;
-    text-decoration: underline;
+    flex-grow: 1;
 `;
 
 const PartyLogo = styled.img`
-    width: 17px;
-    height: 17px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
     margin-left: 10px;
-`;
-
-const VideoMeta = styled.div`
-    font-size: 0.9em;
-    color: #666;
-    margin: 20px;
-`;
-
-const VideoTypeBadge = styled.div`
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background-color: #007bff;
-    color: rgb(255, 255, 255);
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 0.8em;
-`;
-
-const VideoDate = styled.div`
-    font-size: 0.9em;
-    color: #666;
-    margin-top: 5px;
 `;
 
 const FallbackMessage = styled.div`
@@ -183,9 +169,9 @@ const RiksdagenContainer = ({ filter }) => {
 
     useEffect(() => {
         const filteredVideos = filterVideos(videos, filter);
-        setVisibleVideos(filteredVideos.slice(0, 9)); // Show initial 9 filtered videos
+        setVisibleVideos(filteredVideos.slice(0, 9));
         if (filteredVideos.length > 0) {
-            setSelectedVideo(filteredVideos[0]); // Set the latest video as selected
+            setSelectedVideo(filteredVideos[0]);
         }
         if (containerRef.current) {
             containerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
@@ -205,7 +191,7 @@ const RiksdagenContainer = ({ filter }) => {
                 const validVideos = data.filter(item => item && item.linksforapi && item.linksforapi.every(link => link !== null));
                 const videosWithMetadata = validVideos.flatMap(videoData =>
                     videoData.linksforapi.map(videoUrl => ({
-                        id: `${videoData.id}_${videoUrl}`, // Assign a unique ID
+                        id: `${videoData.id}_${videoUrl}`,
                         ...videoData,
                         videoUrl,
                         ...extractNameAndParty(videoUrl)
@@ -213,15 +199,15 @@ const RiksdagenContainer = ({ filter }) => {
                 );
                 setVideos(videosWithMetadata);
                 const initialVideos = filterVideos(videosWithMetadata, filter).slice(0, 9);
-                setVisibleVideos(initialVideos); // Show initial 9 videos
+                setVisibleVideos(initialVideos);
                 if (initialVideos.length > 0) {
-                    setSelectedVideo(initialVideos[0]); // Set the latest video as selected
+                    setSelectedVideo(initialVideos[0]);
                 }
                 setLoading(false);
             })
             .catch(error => {
                 console.error('Error fetching videos:', error);
-                setLoading(false); // Stop the spinner in case of an error
+                setLoading(false);
             });
     };
 
@@ -237,7 +223,6 @@ const RiksdagenContainer = ({ filter }) => {
             const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
             setShowScrollButton(scrollTop > 200);
 
-            // Check if we have reached the bottom
             if (scrollTop + clientHeight >= scrollHeight - 10) {
                 loadMoreVideos();
             }
@@ -296,19 +281,10 @@ const RiksdagenContainer = ({ filter }) => {
         <Container>
             {selectedVideo && (
                 <VideoPlayerContainer key={selectedVideo.id}>
-                    <VideoTypeBadge>{selectedVideo.type}</VideoTypeBadge>
                     <Video controls onError={handleVideoError} key={selectedVideo.videoUrl}>
                         <source src={selectedVideo.videoUrl} type="video/mp4" />
                         Your browser does not support the video tag.
                     </Video>
-                    <VideoMeta>
-                        <VideoTitle>
-                            {selectedVideo.name} ({selectedVideo.party})
-                            {selectedVideo.party && <PartyLogo src={partyLogos[selectedVideo.party]} alt={`${selectedVideo.party} logo`} />}
-                        </VideoTitle>
-                        <div>{selectedVideo.title}</div>
-                        <VideoDate>{new Date(selectedVideo.date).toLocaleDateString()}</VideoDate>
-                    </VideoMeta>
                 </VideoPlayerContainer>
             )}
             <ScrollableContent ref={containerRef} onScroll={handleScroll}>
@@ -319,18 +295,15 @@ const RiksdagenContainer = ({ filter }) => {
                         <Grid>
                             {visibleVideos.map((videoData) => (
                                 <VideoContainer key={videoData.id}>
-                                    <VideoHeader>
-                                        <VideoTitleWrapper>
-                                            <VideoTitle onClick={() => handleVideoClick(videoData)}>
-                                                {videoData.name} ({videoData.party})
-                                            </VideoTitle>
-                                            {videoData.party && <PartyLogo src={partyLogos[videoData.party]} alt={`${videoData.party} logo`} />}
-                                        </VideoTitleWrapper>
-                                    </VideoHeader>
-                                    <VideoMeta>
-                                        <div>{videoData.title}</div>
-                                        <VideoDate>{new Date(videoData.date).toLocaleDateString()}</VideoDate>
-                                    </VideoMeta>
+                                    <VideoThumbnail onClick={() => handleVideoClick(videoData)}>
+                                        <img src={partyLogos[videoData.party]} alt={`${videoData.party} logo`} />
+                                    </VideoThumbnail>
+                                    <VideoInfo>
+                                        <VideoTitle onClick={() => handleVideoClick(videoData)}>
+                                            {videoData.name}
+                                        </VideoTitle>
+                                        <PartyLogo src={partyLogos[videoData.party]} alt={`${videoData.party} logo`} />
+                                    </VideoInfo>
                                 </VideoContainer>
                             ))}
                         </Grid>
