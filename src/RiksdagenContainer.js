@@ -184,6 +184,9 @@ const RiksdagenContainer = ({ filter }) => {
     useEffect(() => {
         const filteredVideos = filterVideos(videos, filter);
         setVisibleVideos(filteredVideos.slice(0, 9)); // Show initial 9 filtered videos
+        if (filteredVideos.length > 0) {
+            setSelectedVideo(filteredVideos[0]); // Set the latest video as selected
+        }
         if (containerRef.current) {
             containerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -209,9 +212,12 @@ const RiksdagenContainer = ({ filter }) => {
                     }))
                 );
                 setVideos(videosWithMetadata);
-                setVisibleVideos(filterVideos(videosWithMetadata, filter).slice(0, 9)); // Show initial 9 videos
+                const initialVideos = filterVideos(videosWithMetadata, filter).slice(0, 9);
+                setVisibleVideos(initialVideos); // Show initial 9 videos
+                if (initialVideos.length > 0) {
+                    setSelectedVideo(initialVideos[0]); // Set the latest video as selected
+                }
                 setLoading(false);
-                setSelectedVideo(videosWithMetadata[0]); // Set the latest video as selected
             })
             .catch(error => {
                 console.error('Error fetching videos:', error);
@@ -289,9 +295,9 @@ const RiksdagenContainer = ({ filter }) => {
     return (
         <Container>
             {selectedVideo && (
-                <VideoPlayerContainer>
+                <VideoPlayerContainer key={selectedVideo.id}>
                     <VideoTypeBadge>{selectedVideo.type}</VideoTypeBadge>
-                    <Video controls onError={handleVideoError}>
+                    <Video controls onError={handleVideoError} key={selectedVideo.videoUrl}>
                         <source src={selectedVideo.videoUrl} type="video/mp4" />
                         Your browser does not support the video tag.
                     </Video>
