@@ -105,6 +105,8 @@ const VideoTitleWrapper = styled.div`
 const VideoTitle = styled.h3`
     font-size: 1.2em;
     margin: 5px 0;
+    cursor: pointer;
+    text-decoration: underline;
 `;
 
 const PartyLogo = styled.img`
@@ -167,6 +169,7 @@ const RiksdagenContainer = ({ filter }) => {
     const [visibleVideos, setVisibleVideos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showScrollButton, setShowScrollButton] = useState(false);
+    const [selectedVideo, setSelectedVideo] = useState(null);
     const containerRef = useRef(null);
 
     useEffect(() => {
@@ -181,41 +184,42 @@ const RiksdagenContainer = ({ filter }) => {
         }
     }, [filter, videos]);
 
-const fetchVideos = () => {
-    setLoading(true);
-    fetch('https://apiserver-real.onrender.com/riksdagen')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            const validVideos = data.filter(item => item && item.linksforapi && item.linksforapi.every(link => link !== null));
-            const videosWithMetadata = validVideos.flatMap(videoData =>
-                videoData.linksforapi.map(videoUrl => ({
-                    id: `${videoData.id}_${videoUrl}`, // Assign a unique ID
-                    ...videoData,
-                    videoUrl,
-                    ...extractNameAndParty(videoUrl)
-                }))
-            );
-            setVideos(videosWithMetadata);
-            setVisibleVideos(filterVideos(videosWithMetadata, filter).slice(0, 9)); // Show initial 9 videos
-            setLoading(false);
-        })
-        .catch(error => {
-            console.error('Error fetching videos:', error);
-            setLoading(false); // Stop the spinner in case of an error
-        });
-};
+    const fetchVideos = () => {
+        setLoading(true);
+        fetch('https://apiserver-real.onrender.com/riksdagen')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                const validVideos = data.filter(item => item && item.linksforapi && item.linksforapi.every(link => link !== null));
+                const videosWithMetadata = validVideos.flatMap(videoData =>
+                    videoData.linksforapi.map(videoUrl => ({
+                        id: `${videoData.id}_${videoUrl}`, // Assign a unique ID
+                        ...videoData,
+                        videoUrl,
+                        ...extractNameAndParty(videoUrl)
+                    }))
+                );
+                setVideos(videosWithMetadata);
+                setVisibleVideos(filterVideos(videosWithMetadata, filter).slice(0, 9)); // Show initial 9 videos
+                setLoading(false);
+                setSelectedVideo(videosWithMetadata[0]); // Set the latest video as selected
+            })
+            .catch(error => {
+                console.error('Error fetching videos:', error);
+                setLoading(false); // Stop the spinner in case of an error
+            });
+    };
 
-const filterVideos = (videos, filter) => {
-    return videos.filter(video =>
-        (filter.length === 0 || filter.includes(video.party)) &&
-        video.number !== 'Unknown' && video.name !== 'Unknown' && video.party !== 'Unknown'
-    );
-};
+    const filterVideos = (videos, filter) => {
+        return videos.filter(video =>
+            (filter.length === 0 || filter.includes(video.party)) &&
+            video.number !== 'Unknown' && video.name !== 'Unknown' && video.party !== 'Unknown'
+        );
+    };
 
     const handleScroll = () => {
         if (containerRef.current) {
@@ -252,28 +256,47 @@ const filterVideos = (videos, filter) => {
         event.target.parentNode.appendChild(fallback);
     };
 
-const extractNameAndParty = (url) => {
-    try {
-        const decodedUrl = decodeURIComponent(url);
-        const regex = /(\d+)_([^_]+(?:_[^_]+)*)_(\w+)\.mp4$/;
-        const match = regex.exec(decodedUrl);
-        if (match) {
-            const number = match[1];
-            const nameParts = match[2].split('_');
-            const party = match[3];
-            const name = nameParts.join(' ');
-            return { number, name, party };
+    const handleVideoClick = (video) => {
+        setSelectedVideo(video);
+    };
+
+    const extractNameAndParty = (url) => {
+        try {
+            const decodedUrl = decodeURIComponent(url);
+            const regex = /(\d+)_([^_]+(?:_[^_]+)*)_(\w+)\.mp4$/;
+            const match = regex.exec(decodedUrl);
+            if (match) {
+                const number = match[1];
+                const nameParts = match[2].split('_');
+                const party = match[3];
+                const name = nameParts.join(' ');
+                return { number, name, party };
+            }
+            return { number: 'Unknown', name: 'Unknown', party: 'Unknown' };
+        } catch (e) {
+            return { number: 'Unknown', name: 'Unknown', party: 'Unknown' };
         }
-        return { number: 'Unknown', name: 'Unknown', party: 'Unknown' };
-    } catch (e) {
-        return { number: 'Unknown', name: 'Unknown', party: 'Unknown' };
-    }
-};
-
-
+    };
 
     return (
         <Container>
+            {selectedVideo && (
+                <VideoContainer>
+                    <VideoTypeBadge>{selectedVideo.type}</VideoTypeBadge>
+                    <VideoDate>{new Date(selectedVideo.date).toLocaleDateString()}</VideoDate>
+                    <Video controls onError={handleVideoError}>
+                        <source src={selectedVideo.videoUrl} type="video/mp4" />
+                        Your browser does not support the video tag.
+                    </Video>
+                    <VideoMeta>
+                        <VideoTitle>
+                            {selectedVideo.name} ({selectedVideo.party})
+                            {selectedVideo.party && <PartyLogo src={partyLogos[selectedVideo.party]} alt={`${selectedVideo.party} logo`} />}
+                        </VideoTitle>
+                        <div>{selectedVideo.title}</div>
+                    </VideoMeta>
+                </VideoContainer>
+            )}
             <ScrollableContent ref={containerRef} onScroll={handleScroll}>
                 {loading ? (
                     <Spinner />
@@ -282,18 +305,17 @@ const extractNameAndParty = (url) => {
                         <Grid>
                             {visibleVideos.map((videoData) => (
                                 <VideoContainer key={videoData.id}>
-                                    <VideoTypeBadge>{videoData.type}</VideoTypeBadge>
-                                    <VideoDate>{new Date(videoData.date).toLocaleDateString()}</VideoDate>
-                                    <Video controls onError={handleVideoError}>
-                                        <source src={videoData.videoUrl} type="video/mp4" />
-                                        Your browser does not support the video tag.
-                                    </Video>
-                                    <VideoMeta>
-                                        <VideoTitle>
-                                            {videoData.name} ({videoData.party})
+                                    <VideoHeader>
+                                        <VideoTitleWrapper>
+                                            <VideoTitle onClick={() => handleVideoClick(videoData)}>
+                                                {videoData.name} ({videoData.party})
+                                            </VideoTitle>
                                             {videoData.party && <PartyLogo src={partyLogos[videoData.party]} alt={`${videoData.party} logo`} />}
-                                        </VideoTitle>
+                                        </VideoTitleWrapper>
+                                    </VideoHeader>
+                                    <VideoMeta>
                                         <div>{videoData.title}</div>
+                                        <VideoDate>{new Date(videoData.date).toLocaleDateString()}</VideoDate>
                                     </VideoMeta>
                                 </VideoContainer>
                             ))}
