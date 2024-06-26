@@ -263,6 +263,7 @@ const RiksdagenContainer = ({ filter }) => {
     };
 
     const handleVideoClick = (video) => {
+        console.log('Video clicked:', video.videoUrl);
         setSelectedVideo(video);
     };
 
