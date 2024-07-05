@@ -20,6 +20,7 @@ const Container = styled.div`
     width: 100%;
     max-width: 350px;
     text-align: center;
+    max-height: 500px;
     position: relative;
     overflow: hidden;
     border: none;

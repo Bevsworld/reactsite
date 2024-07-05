@@ -20,7 +20,7 @@ const Container = styled.div`
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.14);
     width: 100%;
     max-width: 350px;
-    max-height: 500px;
+    max-height: 550px;
     overflow-y: auto;
     margin: 0 auto; /* Centers the container */
     text-align: center;
@@ -29,10 +29,11 @@ const Container = styled.div`
     border-style: solid;
     border-width: 1px;
     border-color: gainsboro;
+    margin-left: 10px;
 
     @media (max-width: 768px) {
-        width: 100%;
-        margin-left: 0;
+        width: auto;
+        margin-left: 50px;
         height: auto;
         margin-bottom: 20px;
 
@@ -48,7 +49,7 @@ const Post = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    margin-top: 5px;
+    margin-top: 10px;
     margin-bottom: 20px;
     background: rgba(255, 255, 255, 0.04);
     padding: 5px;
@@ -56,6 +57,7 @@ const Post = styled.div`
     box-shadow: 0 2px 4px rgba(182, 179, 179, 0.58);
     position: relative;
     overflow-wrap: break-word;
+    gap: 15px;
     width: 100%;
 `;
 

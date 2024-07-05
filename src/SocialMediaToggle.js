@@ -46,10 +46,10 @@ const SocialMediaToggle = ({ active, onToggle }) => {
             />
 
             <Icon
-                src={rgLogo}
-                alt="Riksdagen"
-                active={active === 'riksdagen'}
-                onClick={() => onToggle('riksdagen')}
+                src={youtubeLogo}
+                alt="Youtube"
+                active={active === 'youtube'}
+                onClick={() => onToggle('youtube')}
             />
         </ToggleContainer>
     );

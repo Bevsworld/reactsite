@@ -54,6 +54,7 @@ const MainContent = styled.div`
     background-color: rgba(255, 255, 255, 0.07);
     color: #100404;
     width: 100%;
+    padding-top: 50px;
     padding-bottom: 10px;
     margin-bottom: 27px;
 `;
@@ -83,7 +84,7 @@ const BodyContent = styled.div`
 
 const ContentWrapper = styled.div`
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     align-items: flex-start;
     width: 100%;
     max-width: 1500px;
@@ -163,7 +164,7 @@ function App() {
             <AppContainer>
                 <GlobalStyle />
                 <Header/>
-                <WelcomeSection />
+
                 <MainContent>
                     <BodyContent>
                         {isMobile && <SocialMediaToggle active={activeContainer} onToggle={setActiveContainer} />}
@@ -179,7 +180,7 @@ function App() {
                                 />
                             ))}
                         </PartyLogos>
-                        <h2>Senaste</h2>
+                        <h2>Här finner du de senaste politiska inläggen ifrån Youtube, Twitter, Instagram </h2>
                         <Routes>
                             <Route path="/youtube" element={<YoutubeVids filter={selectedParties} />} />
                             <Route path="/twitter" element={<ContentContainer filter={selectedParties} />} />
@@ -192,8 +193,9 @@ function App() {
                                             activeContainer === 'youtube' ? <YoutubeVids filter={selectedParties}/> :
                                                 activeContainer === 'riksdagen' ? <RiksdagenContainer filter={selectedParties} /> : null
                                 ) : (
+
                                     <ContentWrapper>
-                                        <RiksdagenContainer filter={selectedParties}/>
+                                        <YoutubeVids filter={selectedParties}/>
                                         <ContentContainer filter={selectedParties}/>
                                         <RightContainer filter={selectedParties}/>
                                     </ContentWrapper>

@@ -24,8 +24,9 @@ const StyledOuterContainer = styled(Container)(({ theme }) => ({
     backgroundColor: 'offwhite',
     borderRadius: 8,
     width: '100%',
-    maxWidth: '350px',
-    height: 'auto',
+    maxWidth: '500px',
+    height: '550px',
+    marginLeft:'15px',
     overflow: 'hidden',
     textAlign: 'left',
     margin: '0 auto', // Centers the container
@@ -36,7 +37,7 @@ const StyledOuterContainer = styled(Container)(({ theme }) => ({
 
     [theme.breakpoints.down('md')]: {
         color: 'dimgray',
-        width: '100%',
+        width: 'auto',
         marginLeft: 0,
         height: 'auto',
         borderColor: 'white',

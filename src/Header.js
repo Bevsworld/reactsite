@@ -47,6 +47,8 @@ const Logo = styled.h1`
   }
 `;
 
+
+
 // The Header component
 const Header = () => {
     // Function to reload the page
