@@ -30,8 +30,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "postinstall": "ls node_modules",
-    "postbuild": "react-snap"
+    "postinstall": "ls node_modules"
   },
   "eslintConfig": {
     "extends": [
