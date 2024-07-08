@@ -149,30 +149,28 @@ const RightContainer = ({ filter }) => {
             .then(data => {
                 const filteredData = data.filter(post => post.type !== 'Reels');
                 setPosts(filteredData);
-                setVisiblePosts(filteredData.slice(0, BATCH_SIZE));
                 setLoading(false);
+                applyFilter(filteredData, filter);
             })
             .catch(error => console.error('Error fetching posts:', error));
     }, []);
 
-    const updateVisiblePosts = useCallback(() => {
-        if (filter.length === 0) {
-            setVisiblePosts(posts.slice(0, BATCH_SIZE));
-        } else {
-            const filteredPosts = posts.filter(post => filter.includes(post.party));
-            setVisiblePosts(filteredPosts.slice(0, BATCH_SIZE));
-        }
-    }, [filter, posts]);
-
-    useEffect(() => {
-        updateVisiblePosts();
-    }, [updateVisiblePosts]);
-
-    useEffect(() => {
+    const applyFilter = useCallback((posts, filter) => {
+        const filteredPosts = filter.length === 0 ? posts : posts.filter(post => filter.includes(post.party));
+        setVisiblePosts(filteredPosts.slice(0, BATCH_SIZE));
         if (containerRef.current) {
-            containerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+            containerRef.current.scrollTop = 0;
         }
-    }, [filter]);
+    }, []);
+
+    const loadMorePosts = useCallback(() => {
+        setVisiblePosts((prevVisiblePosts) => {
+            const filteredPosts = filter.length === 0 ? posts : posts.filter(post => filter.includes(post.party));
+            const startIndex = prevVisiblePosts.length;
+            const nextPosts = filteredPosts.slice(startIndex, startIndex + BATCH_SIZE);
+            return [...prevVisiblePosts, ...nextPosts];
+        });
+    }, [posts, filter]);
 
     const handleScroll = useCallback(() => {
         if (containerRef.current) {
@@ -180,13 +178,25 @@ const RightContainer = ({ filter }) => {
             setShowScrollButton(scrollTop > 200);
 
             if (scrollTop + clientHeight >= scrollHeight - 10) {
-                if (visiblePosts.length < posts.length) {
-                    const morePosts = posts.slice(visiblePosts.length, visiblePosts.length + BATCH_SIZE);
-                    setVisiblePosts(prev => [...prev, ...morePosts]);
-                }
+                loadMorePosts();
             }
         }
-    }, [posts, visiblePosts]);
+    }, [loadMorePosts]);
+
+    useEffect(() => {
+        if (containerRef.current) {
+            containerRef.current.addEventListener('scroll', handleScroll);
+        }
+        return () => {
+            if (containerRef.current) {
+                containerRef.current.removeEventListener('scroll', handleScroll);
+            }
+        };
+    }, [handleScroll]);
+
+    useEffect(() => {
+        applyFilter(posts, filter);
+    }, [filter, posts, applyFilter]);
 
     const scrollToTop = () => {
         if (containerRef.current) {

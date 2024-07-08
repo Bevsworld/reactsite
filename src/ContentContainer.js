@@ -26,7 +26,7 @@ const StyledOuterContainer = styled(Container)(({ theme }) => ({
     width: '100%',
     maxWidth: '500px',
     height: '550px',
-    marginLeft:'15px',
+    marginLeft: '15px',
     overflow: 'hidden',
     textAlign: 'left',
     margin: '0 auto', // Centers the container
@@ -64,7 +64,7 @@ const StyledTweet = styled(Box)(({ theme }) => ({
     alignItems: 'flex-start',
     fontSize: 17,
     marginBottom: theme.spacing(2.5),
-    backgroundColor: "offwhite",
+    backgroundColor: 'offwhite',
     padding: theme.spacing(1.25),
     borderRadius: 8,
     boxShadow: '0 3px 5px rgba(0, 0, 0, 0.2)',
@@ -93,10 +93,10 @@ const ProfilePicture = styled('img')({
     borderRadius: '50%',
     width: '50px',
     height: '50px',
-    marginLeft: "9px",
-    borderStyle: "solid",
-    borderWidth: "1px",
-    borderColor: "gainsboro",
+    marginLeft: '9px',
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    borderColor: 'gainsboro',
     boxShadow: '0 3px 5px rgba(0, 0, 0, 0.2)',
 });
 
@@ -137,22 +137,31 @@ const ContentContainer = ({ filter }) => {
 
     useEffect(() => {
         fetch('https://apiserver-real.onrender.com/tweets')
-            .then(response => response.json())
-            .then(data => {
+            .then((response) => response.json())
+            .then((data) => {
                 setTweets(data);
-                setVisibleTweets(data.slice(0, BATCH_SIZE));
                 setLoading(false);
+                applyFilter(data, filter);
             })
-            .catch(error => console.error('Error fetching tweets:', error));
+            .catch((error) => console.error('Error fetching tweets:', error));
     }, []);
 
+    const applyFilter = (tweets, filter) => {
+        const filteredTweets = filter.length === 0 ? tweets : tweets.filter((tweet) => filter.includes(tweet.party));
+        setVisibleTweets(filteredTweets.slice(0, BATCH_SIZE));
+        if (containerRef.current) {
+            containerRef.current.scrollTop = 0;
+        }
+    };
+
     const loadMoreTweets = useCallback(() => {
-        setVisibleTweets(prevVisibleTweets => {
+        setVisibleTweets((prevVisibleTweets) => {
+            const filteredTweets = filter.length === 0 ? tweets : tweets.filter((tweet) => filter.includes(tweet.party));
             const startIndex = prevVisibleTweets.length;
-            const nextTweets = tweets.slice(startIndex, startIndex + BATCH_SIZE);
+            const nextTweets = filteredTweets.slice(startIndex, startIndex + BATCH_SIZE);
             return [...prevVisibleTweets, ...nextTweets];
         });
-    }, [tweets]);
+    }, [tweets, filter]);
 
     const handleScroll = useCallback(() => {
         if (containerRef.current) {
@@ -175,8 +184,7 @@ const ContentContainer = ({ filter }) => {
     }, [handleScroll]);
 
     useEffect(() => {
-        const filteredTweets = filter.length === 0 ? tweets : tweets.filter(tweet => filter.includes(tweet.party));
-        setVisibleTweets(filteredTweets.slice(0, BATCH_SIZE));
+        applyFilter(tweets, filter);
     }, [filter, tweets]);
 
     const getPartyLogo = (party) => {

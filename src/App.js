@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import styled, { createGlobalStyle } from 'styled-components';
-import { FaYoutube, FaTwitter, FaInstagram } from 'react-icons/fa';
 import Footer from './Footer';
 import Header from './Header';
-import WelcomeSection from './WelcomeSection';
 import ContentContainer from './ContentContainer';
 import RightContainer from './RightContainer';
 import SocialMediaToggle from './SocialMediaToggle';
@@ -18,7 +16,6 @@ import mpLogo from './mp.png';
 import vLogo from './v.png';
 import cLogo from './c.png';
 import mLogo from './moderat.png';
-
 
 const GlobalStyle = createGlobalStyle`
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
@@ -42,7 +39,6 @@ const AppContainer = styled.div`
     width: 100%;
     overflow-x: hidden; /* Prevents horizontal scroll */
 `;
-
 
 const MainContent = styled.div`
     font-family: 'Montserrat', sans-serif;
@@ -77,7 +73,7 @@ const BodyContent = styled.div`
     }
 
     h2 {
-        margin-bottom: 31px;
+        margin-bottom: 30px;
         margin-top: 50px;
         font-size: 19px;
         font-weight: bolder;
@@ -169,9 +165,6 @@ function App() {
 
                 <MainContent>
                     <BodyContent>
-
-
-
                         <p>Tryck på partiet du vill se inlägg ifrån</p>
                         <PartyLogos>
                             {Object.keys(logos).map(party => (
@@ -183,7 +176,6 @@ function App() {
                                     onClick={() => handleLogoClick(party)}
                                 />
                             ))}
-
                         </PartyLogos>
                         {isMobile && <SocialMediaToggle active={activeContainer} onToggle={setActiveContainer}/>}
 
@@ -197,10 +189,8 @@ function App() {
                                     activeContainer === 'twitter' ? <ContentContainer filter={selectedParties}/> :
                                         activeContainer === 'instagram' ? <RightContainer filter={selectedParties}/> :
                                             activeContainer === 'youtube' ? <YoutubeVids filter={selectedParties}/> :
-                                                activeContainer === 'riksdagen' ?
-                                                    <RiksdagenContainer filter={selectedParties}/> : null
+                                                activeContainer === 'riksdagen' ? <RiksdagenContainer filter={selectedParties}/> : null
                                 ) : (
-
                                     <ContentWrapper>
                                         <YoutubeVids filter={selectedParties}/>
                                         <ContentContainer filter={selectedParties}/>
@@ -214,7 +204,7 @@ function App() {
 
                 </MainContent>
             </AppContainer>
-            <Footer></Footer>
+            <Footer />
         </Router>
     );
 }
