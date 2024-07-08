@@ -19,7 +19,6 @@
     "react-router-config": "^5.1.1",
     "react-router-dom": "^6.24.0",
     "react-scripts": "5.0.1",
-    "react-snap": "^1.23.0",
     "sitemap": "^8.0.0",
     "styled-components": "^6.1.11",
     "video.js": "^8.12.0",
@@ -33,18 +32,6 @@
     "eject": "react-scripts eject",
     "postinstall": "ls node_modules",
     "postbuild": "react-snap"
-  },
-  "reactSnap": {
-    "inlineCss": true,
-    "puppeteer": {
-      "args": [
-        "--no-sandbox",
-        "--disable-setuid-sandbox"
-      ]
-    },
-    "fixWebpackChunksIssue": false,
-    "puppeteerScript": "puppeteer-script.js",
-    "skipThirdPartyRequests": true
   },
   "eslintConfig": {
     "extends": [

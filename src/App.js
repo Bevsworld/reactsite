@@ -77,7 +77,7 @@ const BodyContent = styled.div`
     }
 
     h2 {
-        margin-bottom: 30px;
+        margin-bottom: 31px;
         margin-top: 50px;
         font-size: 19px;
         font-weight: bolder;
