@@ -3,54 +3,82 @@ import styled from 'styled-components';
 import twitterLogo from './twitter-logo.png';
 import instagramLogo from './instagram-img.png';
 import youtubeLogo from './youtube-logo.png';
-import rgLogo from './rg.jpg'; // Import the new RG logo
 
 const ToggleContainer = styled.div`
     display: flex;
-    height: 30px;
+    flex-direction: row; /* Display elements in a row */
+    height: auto;
     background-color: #ffffff;
     border-radius: 6px;
-    width: 100%; /* Increase width to accommodate the new icon */
-    justify-content: space-around;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.06);
+    width: auto;
+    justify-content: center;
+    align-items: center;
+    font-size: 11px;
     margin: 30px auto;
+    padding: 10px;
+    padding-bottom: 0px;
+
 
     @media (min-width: 768px) {
         display: none;  // Hide on screens wider than 768px
     }
 `;
 
+const PlatformContainer = styled.label`
+    display: flex;
+    align-items: center;
+    margin: 0 10px; /* Add horizontal margin for spacing */
+`;
+
 const Icon = styled.img`
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-    transform: scale(${props => props.active ? 1.2 : 1});
-    opacity: ${props => props.active ? 1 : 0.5};
+    width: 17px;
+    height: 17px;
+    margin-right: 3px;
+`;
+
+const RadioButton = styled.input`
+    margin-right: 3px;
+`;
+
+const LabelText = styled.span`
+    margin-right: 2px; /* Space between "Platform:" and the first icon */
+    font-weight: bold;
 `;
 
 const SocialMediaToggle = ({ active, onToggle }) => {
     return (
         <ToggleContainer>
-            <Icon
-                src={twitterLogo}
-                alt="Twitter"
-                active={active === 'twitter'}
-                onClick={() => onToggle('twitter')}
-            />
-            <Icon
-                src={instagramLogo}
-                alt="Instagram"
-                active={active === 'instagram'}
-                onClick={() => onToggle('instagram')}
-            />
-
-            <Icon
-                src={youtubeLogo}
-                alt="Youtube"
-                active={active === 'youtube'}
-                onClick={() => onToggle('youtube')}
-            />
+            <LabelText>Platform:</LabelText>
+            <PlatformContainer>
+                <RadioButton
+                    type="radio"
+                    name="socialMedia"
+                    checked={active === 'twitter'}
+                    onChange={() => onToggle('twitter')}
+                />
+                <Icon src={twitterLogo} alt="Twitter" />
+                Twitter
+            </PlatformContainer>
+            <PlatformContainer>
+                <RadioButton
+                    type="radio"
+                    name="socialMedia"
+                    checked={active === 'instagram'}
+                    onChange={() => onToggle('instagram')}
+                />
+                <Icon src={instagramLogo} alt="Instagram" />
+                Instagram
+            </PlatformContainer>
+            <PlatformContainer>
+                <RadioButton
+                    type="radio"
+                    name="socialMedia"
+                    checked={active === 'youtube'}
+                    onChange={() => onToggle('youtube')}
+                />
+                <Icon src={youtubeLogo} alt="Youtube" />
+                Youtube
+            </PlatformContainer>
         </ToggleContainer>
     );
 };
