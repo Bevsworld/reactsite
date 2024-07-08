@@ -19,10 +19,10 @@ const Container = styled.div`
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.14);
     width: 100%;
-    max-width: 350px;
+    max-width: 400px;
     max-height: 550px;
     overflow-y: auto;
-    margin: 0 auto; /* Centers the container */
+    margin: 0 auto;
     text-align: center;
     position: relative;
     overflow-x: hidden;
@@ -33,7 +33,8 @@ const Container = styled.div`
 
     @media (max-width: 768px) {
         width: auto;
-        margin-left: 50px;
+        max-width: 400px;
+        max-height: 800px;
         height: auto;
         margin-bottom: 20px;
 
@@ -60,7 +61,6 @@ const Post = styled.div`
     gap: 15px;
     width: 100%;
 `;
-
 
 const ProfilePicture = styled.img`
     border-radius: 50%;
@@ -127,6 +127,13 @@ const Caption = styled.p`
     align-self: center;
 `;
 
+const SkeletonPost = styled.div`
+    height: 100px;
+    background: #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 20px;
+`;
+
 const RightContainer = ({ filter }) => {
     const [posts, setPosts] = useState([]);
     const [visiblePosts, setVisiblePosts] = useState([]);
@@ -134,7 +141,7 @@ const RightContainer = ({ filter }) => {
     const [showScrollButton, setShowScrollButton] = useState(false);
     const containerRef = useRef(null);
 
-    const BATCH_SIZE = 25;
+    const BATCH_SIZE = 10;
 
     useEffect(() => {
         fetch('https://apiserver-real.onrender.com/igposts')
@@ -222,7 +229,9 @@ const RightContainer = ({ filter }) => {
     return (
         <Container ref={containerRef} onScroll={handleScroll}>
             {loading ? (
-                <Spinner />
+                Array.from({ length: BATCH_SIZE }).map((_, index) => (
+                    <SkeletonPost key={index} />
+                ))
             ) : (
                 visiblePosts.map((post, index) => (
                     <Post key={index}>

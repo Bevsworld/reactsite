@@ -16,7 +16,7 @@ import vLogo from './v.png';
 import cLogo from './c.png';
 import mLogo from './moderat.png';
 
-const BATCH_SIZE = 25;
+const BATCH_SIZE = 10;
 
 const StyledOuterContainer = styled(Container)(({ theme }) => ({
     marginTop: theme.spacing(2.5),
@@ -75,6 +75,13 @@ const StyledTweet = styled(Box)(({ theme }) => ({
     borderLeftStyle: 'solid',
     borderLeftWidth: '2px',
     borderLeftColor: 'lightslategrey',
+}));
+
+const SkeletonTweet = styled(Box)(({ theme }) => ({
+    height: '100px',
+    background: '#e0e0e0',
+    borderRadius: 8,
+    marginBottom: theme.spacing(2.5),
 }));
 
 const ProfilePictureContainer = styled(Box)({
@@ -147,14 +154,14 @@ const ContentContainer = ({ filter }) => {
         });
     }, [tweets]);
 
-    const handleScroll = () => {
+    const handleScroll = useCallback(() => {
         if (containerRef.current) {
             const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
             if (scrollTop + clientHeight >= scrollHeight - 10) {
                 loadMoreTweets();
             }
         }
-    };
+    }, [loadMoreTweets]);
 
     useEffect(() => {
         if (containerRef.current) {
@@ -198,9 +205,9 @@ const ContentContainer = ({ filter }) => {
     return (
         <StyledOuterContainer>
             {loading ? (
-                <Box display="flex" justifyContent="center" alignItems="center" height="100%">
-                    <CircularProgress />
-                </Box>
+                Array.from({ length: BATCH_SIZE }).map((_, index) => (
+                    <SkeletonTweet key={index} />
+                ))
             ) : (
                 <StyledInnerContainer ref={containerRef}>
                     {visibleTweets.map((tweet, index) => (
